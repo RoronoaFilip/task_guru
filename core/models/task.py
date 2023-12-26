@@ -9,8 +9,8 @@ class Task(models.Model):
     status = models.ForeignKey('Status', on_delete=models.CASCADE)
     resolution = models.ForeignKey('Resolution', on_delete=models.CASCADE, blank=True, null=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
-    assignee = models.ForeignKey('TaskGuruUser', on_delete=models.CASCADE, related_name='assignee', blank=True, null=True)
-    creator = models.ForeignKey('TaskGuruUser', on_delete=models.CASCADE, related_name='reporter')
+    assignee = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='assignee', blank=True, null=True)
+    creator = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='reporter')
     modified = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

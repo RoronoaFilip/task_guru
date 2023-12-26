@@ -1,5 +1,6 @@
+from django.contrib.auth.models import User
+
 from core.models.task import Task, Status, Type
-from core.models.user import TaskGuruUser
 
 
 def create_task(title, task_type, description, parent, assignee, creator_id):
@@ -12,7 +13,7 @@ def create_task(title, task_type, description, parent, assignee, creator_id):
         resolution=None,
         parent=parent,
         assignee=assignee,
-        creator=TaskGuruUser.objects.get(id=creator_id),
+        creator=User.objects.get(id=creator_id),
     )
 
     return task

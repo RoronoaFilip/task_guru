@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+    Welcome!
+    <br/><br/>
+
+    <link rel="stylesheet" href="{% static 'sockets_index.css' %}">
+    <div class="form-container">
+        <div class="form-column">
+            <div class="form-group">
+                <form id="form-single">
+                    <label>
+                        Single
+                        <input id="single-input" class="single-input" name="single" type="text"/>
+                    </label>
+                    <button id="single-button" class="send-button">Send</button>
+                </form>
+                <ul id="single-list" class="item-list single-list">
+                    <!-- List items for Single input -->
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                    <li>Item 3</li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-column">
+            <div class="form-group">
+                <form id="form-multiple">
+                    <label>
+                        Multiple
+                        <input id="multiple-input" class="multiple-input" name="multiple" type="text"/>
+                    </label>
+                    <button id="multiple-button" class="send-button">Send</button>
+
+                </form>
+                <ul id="multiple-list" class="item-list multiple-list">
+                    <!-- List items for Multiple input -->
+                    <li>Item A</li>
+                    <li>Item B</li>
+                    <li>Item C</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <form method="post" action="/logout">
+        {% csrf_token %}
+        <input type="submit" value="Logout">
+    </form>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script>
+        var socketSingle = new WebSocket('ws://127.0.0.1:8000/ws/single');
+        var socketMultiple = new WebSocket('ws://127.0.0.1:8000/ws/multiple');
+
+        socketSingle.onmessage = function (e) {
+            console.log('Single Received message:', e.data);
+            const li = document.createElement('li');
+            li.append(e.data);
+            document.getElementById("single-list").appendChild(li);
+        };
+
+        socketMultiple.onmessage = function (e) {
+            console.log('Multiple Received message:', e.data);
+            const li = document.createElement('li');
+            li.append(e.data);
+            document.getElementById("multiple-list").appendChild(li);
+        };
+
+        document.getElementById("form-single").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const input = document.getElementById("single-input");
+            const msg = input.value;
+            socketSingle.send(JSON.stringify({
+                'text_message': msg,
+                'group_name': 'single'
+            }));
+            input.value = '';
+            input.focus();
+        });
+
+        document.getElementById("form-multiple").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const input = document.getElementById("multiple-input");
+            const msg = input.value;
+            socketMultiple.send(JSON.stringify({
+                'text_message': msg,
+                'group_name': 'multiple'
+            }));
+            input.value = '';
+            input.focus();
+        });
+
+    </script>
+
+
+{% endblock %}

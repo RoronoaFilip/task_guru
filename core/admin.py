@@ -1,14 +1,12 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 
-# Register your models here.
 from .models.task import Task, Type, Status, Resolution
-from .models.user import TaskGuruUser
 
 
-class TaskGuruUserAdmin(admin.ModelAdmin):
-    model = TaskGuruUser
-    list_display = ('id', 'username', 'password', 'email', 'first_name', 'last_name')
-    search_fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name')
+class CustomUserAdmin(UserAdmin):
+    list_display = ('id', 'username', 'email', 'first_name', 'last_name', 'is_staff')
 
 
 class TaskAdmin(admin.ModelAdmin):
@@ -37,7 +35,8 @@ class ResolutionAdmin(admin.ModelAdmin):
     search_fields = ('id', 'resolution',)
 
 
-admin.site.register(TaskGuruUser, TaskGuruUserAdmin)
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Status, StatusAdmin)
 admin.site.register(Type, TypeAdmin)

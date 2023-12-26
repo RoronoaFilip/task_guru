@@ -1,0 +1,44 @@
+.form-container {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    margin: 20px;
+}
+
+.form-column {
+    text-align: center;
+}
+
+.single-input,
+.multiple-input {
+    margin-top: 5px;
+    padding: 5px;
+    width: 150px;
+}
+
+.send-button {
+    margin-top: 10px;
+    padding: 8px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.send-button:hover {
+    background-color: #45a049;
+}
+
+.item-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.single-list {
+    color: blue;
+}
+
+.multiple-list {
+    color: green;
+}

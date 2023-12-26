@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,7 +39,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_api_key',
     "core.apps.CoreConfig",
-    "api.apps.ApiConfig"
+    "api.apps.ApiConfig",
+    "gui.apps.GuiConfig",
+    "web_sockets.apps.WebSocketsConfig"
 ]
 
 MIDDLEWARE = [
@@ -116,6 +119,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "gui/static"
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -130,3 +137,19 @@ REST_FRAMEWORK = {
 }
 
 APPEND_SLASH = False
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+ASGI_APPLICATION = "task_guru.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
+
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login'
