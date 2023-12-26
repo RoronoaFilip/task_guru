@@ -1,0 +1,14 @@
+DONE:
+    - Initialized project
+    - Created an API App
+    - Created a Gui App
+    - Created a WebSocket App
+
+TODO:
+    - Add all Rest Mappings
+    - Add Pages
+    - Add Missing Models in Core
+    - Add Views (HTML) for the Models
+    - Add Controllers for the Views
+    - Add Live Updates for through WebSockets for Updates
+    - But for now make the Gui App work, add event Listeners and stuff
