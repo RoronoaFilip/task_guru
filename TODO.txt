@@ -3,12 +3,17 @@ DONE:
     - Created an API App
     - Created a Gui App
     - Created a WebSocket App
+    - Created Project Model
+    - Created API for Project Model and finished API for Task Model
+    - Add all Rest Mappings.
+    - Add Missing Models in Core
 
 TODO:
-    - Add all Rest Mappings
-    - Add Pages
-    - Add Missing Models in Core
-    - Add Views (HTML) for the Models
+    - Add Pages. (HTML) Gui App.
+    - Create Projects Listing Page and Project Task Page.
+    - Add Views (HTML) for the Models. Visualization Divs
     - Add Controllers for the Views
-    - Add Live Updates for through WebSockets for Updates
+    - Add Live Updates through WebSockets for Updates on the Models
     - But for now make the Gui App work, add event Listeners and stuff
+    - Add REST Endpoints only if necessary
+    - Add a way to Generate API Keys or Tokens in the REST API
