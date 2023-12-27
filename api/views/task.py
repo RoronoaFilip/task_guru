@@ -45,10 +45,14 @@ class TaskView(APIView):
 
     def patch(self, request, task_id, *args, **kwargs):
         task = Task.objects.get(id=task_id)
-        request.data['type'] = Type.objects.get(type=request.data.get('type', task.type)).id
-        request.data['status'] = Status.objects.get(status=request.data.get('status', task.status)).id
-        request.data['assignee'] = User.objects.get(id=request.data.get('assignee_id', task.assignee_id)).id
-        serializer = TaskSerializer(task, data=request.data, partial=True)
+        patch_data = {
+            'type': Type.objects.get(type=request.data.get('type', task.type)).id,
+            'status': Status.objects.get(status=request.data.get('status', task.status)).id,
+            'assignee': User.objects.get(id=request.data.get('assignee_id', task.assignee_id)).id,
+            'title': request.data.get('title', task.title),
+            'description': request.data.get('description', task.description),
+        }
+        serializer = TaskSerializer(task, data=patch_data, partial=True)
 
         if serializer.is_valid():
             serializer.save()
