@@ -132,7 +132,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [],
     'DEFAULT_PERMISSION_CLASSES': [
         # 'rest_framework.permissions.AllowAny', # No Authorization Header needed
-        'rest_framework_api_key.permissions.HasAPIKey',  # Authorization: Api-Key <key>
+        # 'rest_framework_api_key.permissions.HasAPIKey',  # Authorization: Api-Key <key>
     ],
 }
 

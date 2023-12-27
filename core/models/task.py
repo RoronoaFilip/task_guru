@@ -9,6 +9,7 @@ class Task(models.Model):
     status = models.ForeignKey('Status', on_delete=models.CASCADE)
     assignee = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='assignee', blank=True, null=True)
     creator = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='reporter')
+    project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='tasks')
 
     def __str__(self):
         return self.title
@@ -31,4 +32,3 @@ class Type(models.Model):
 
     def __str__(self):
         return self.type
-
