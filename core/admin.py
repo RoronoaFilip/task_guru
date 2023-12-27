@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models.task import Task, Type, Status, Resolution
+from .models.task import Task, Type, Status
 
 
 class CustomUserAdmin(UserAdmin):
@@ -12,9 +12,9 @@ class CustomUserAdmin(UserAdmin):
 class TaskAdmin(admin.ModelAdmin):
     model = Task
     list_display = (
-        'id', 'title', 'type', 'description', 'status', 'assignee', 'creator', 'modified', 'resolution', 'parent')
-    list_filter = ('id', 'type', 'status', 'assignee', 'creator', 'modified', 'resolution', 'parent')
-    search_fields = ('id', 'title', 'type', 'description', 'assignee', 'creator', 'modified', 'resolution', 'parent')
+        'id', 'title', 'type', 'description', 'status', 'assignee', 'creator')
+    list_filter = ('id', 'type', 'status', 'assignee', 'creator')
+    search_fields = ('id', 'title', 'type', 'description', 'assignee', 'creator')
 
 
 class StatusAdmin(admin.ModelAdmin):
@@ -29,15 +29,8 @@ class TypeAdmin(admin.ModelAdmin):
     search_fields = ('id', 'type',)
 
 
-class ResolutionAdmin(admin.ModelAdmin):
-    model = Resolution
-    list_display = ('id', 'resolution',)
-    search_fields = ('id', 'resolution',)
-
-
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Status, StatusAdmin)
 admin.site.register(Type, TypeAdmin)
-admin.site.register(Resolution, ResolutionAdmin)

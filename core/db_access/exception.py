@@ -1,0 +1,2 @@
+class MissingParentException(Exception):
+    pass
