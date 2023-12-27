@@ -1,18 +1,39 @@
 from django.contrib.auth.models import User
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from api.decorators import content_type_json
 from core.models.project import Project
-from core.serializers import ProjectSerializer
+from core.models.task import Task
+from core.serializers import ProjectSerializer, TaskSerializer
 
 
+@content_type_json
 @api_view(['GET'])
 def get_project_members(request, project_id, *args, **kwargs):
-    project = Project.objects.get(id=project_id)
-    members = project.members.all()
-    return Response([{'id': member.id, 'username': member.username} for member in members],
-                    status=200 if len(members) > 0 else 204)
+    """Returns all members for a given project by project_id."""
+    try:
+        project = Project.objects.get(id=project_id)
+        members = project.members.all()
+        return Response([{'id': member.id, 'username': member.username} for member in members],
+                        status=status.HTTP_200_OK)
+    except Project.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@content_type_json
+@api_view(['GET'])
+def get_project_tasks(request, project_id, *args, **kwargs):
+    """Returns all tasks for a given project by project_id"""
+    try:
+        project = Project.objects.get(id=project_id)
+        tasks = Task.objects.filter(project=project)
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Project.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class ProjectView(APIView):
@@ -25,13 +46,11 @@ class ProjectView(APIView):
                 serializer = ProjectSerializer(task)
             else:
                 tasks = Project.objects.all()
-                if len(tasks) == 0:
-                    return Response(status=204)
                 serializer = ProjectSerializer(tasks, many=True)
         except Project.DoesNotExist:
-            return Response(status=404)
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-        return Response(serializer.data, status=200)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         request.data['creator'] = User.objects.get(id=request.data.get('creator_id')).id if request.data.get(
@@ -41,8 +60,8 @@ class ProjectView(APIView):
         serializer = ProjectSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, project_id, *args, **kwargs):
         project = Project.objects.get(id=project_id)
@@ -55,10 +74,10 @@ class ProjectView(APIView):
         serializer = ProjectSerializer(project, data=patch_data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=200)
-        return Response(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, project_id, *args, **kwargs):
         project = Project.objects.get(id=project_id)
         project.delete()
-        return Response(status=200)
+        return Response(status=status.HTTP_200_OK)
