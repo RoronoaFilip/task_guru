@@ -1,0 +1,18 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'main/home.css' %}">
+    <div class="welcome-container">
+        <h1 class="welcome-heading">Welcome, {{ user.first_name }} {{ user.last_name }}!</h1>
+        <p class="welcome-message">
+            Manage your projects seamlessly.
+        </p>
+        <p class="welcome-message">
+            Log and track tasks, collaborate with your team,
+            and stay organized throughout your project's lifecycle.
+        </p>
+        <p class="welcome-message">
+            Get started by creating a new project or explore existing ones to view and manage tasks.
+        </p>
+    </div>
+{% endblock %}

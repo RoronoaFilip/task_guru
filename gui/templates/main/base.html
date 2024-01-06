@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sockets</title>
+    <link rel="stylesheet" href="{% static 'main/base.css' %}">
+</head>
+<body>
+<div class="container">
+    {% if user.is_authenticated %}
+        <div class="navbar">
+            <a href="/" class="nav-item">Home</a>
+            <a href="/sockets_test" class="nav-item">Sockets</a>
+            <a href="/logout" class="nav-item">Logout</a>
+        </div>
+    {% else %}
+        <div class="navbar">
+            <a href="/login" class="nav-item">Login</a>
+            <a href="/register" class="nav-item">Register</a>
+        </div>
+    {% endif %}
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+</body>
+</html>

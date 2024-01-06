@@ -1,0 +1,43 @@
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.navbar {
+    background-color: #7e57c2;
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    z-index: 10;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+    padding: 10px;
+    margin: 5px 0;
+    text-align: center;
+    width: 90%;
+    transition: background-color 0.3s;
+}
+
+.nav-item:hover {
+    background-color: #6533c0;
+}
+
+.nav-item:active {
+    background-color: #5a1fc0;
+}
