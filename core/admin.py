@@ -8,6 +8,8 @@ from .models.task import Task, Type, Status
 
 class CustomUserAdmin(UserAdmin):
     list_display = ('id', 'username', 'email', 'first_name', 'last_name', 'is_staff')
+    list_filter = ('id', 'username', 'email', 'first_name', 'last_name', 'is_staff')
+    search_fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_staff')
 
 
 class TaskAdmin(admin.ModelAdmin):
