@@ -1,0 +1,73 @@
+.flex-direction-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    &.flex-wrap {
+        flex-wrap: wrap;
+    }
+    &.flex-start {
+        justify-content: flex-start;
+    }
+}
+
+.project-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    width: 250px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.project-card:hover {
+    cursor: pointer;
+    background-color: rgba(193, 193, 193, 0.76);
+}
+
+.project-name {
+    font-size: 1.5em;
+    margin-bottom: 8px;
+}
+
+.project-description {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 12px;
+}
+
+.project-creator {
+    font-size: 0.9em;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.project-members {
+    list-style-type: none;
+    padding: 0;
+}
+
+.project-members li {
+    font-size: 0.9em;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.project-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    width: 20%;
+}
+
+.delete-icon,
+.edit-icon {
+    font-size: 1.2em;
+    color: #ff6347;
+    cursor: pointer;
+}
+
+.edit-icon {
+    color: #007bff;
+}

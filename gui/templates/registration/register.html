@@ -4,11 +4,11 @@
 {% block content %}
     <link rel="stylesheet" href="{% static 'forms.css' %}">
     <div class="forms-container">
-        <h2 class="forms-header">Login</h2>
+        <h2 class="forms-header">Register</h2>
         <form class="forms-form" method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button class="forms-button" type="submit">Login</button>
+            <button class="forms-button" type="submit">Register</button>
         </form>
     </div>
 {% endblock %}
