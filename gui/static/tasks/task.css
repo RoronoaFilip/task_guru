@@ -1,0 +1,76 @@
+.task,
+.task *,
+.task-content,
+.task-content *,
+.task-header,
+.task-header * {
+    margin: 0;
+    padding: 0;
+}
+
+.task {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 10px;
+    padding: 8px;
+    width: 90%;
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.task-arrows {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #b0b0b0;
+    margin: 0 6px 0 6px;
+    cursor: pointer;
+}
+
+.arrow {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.task-content {
+    flex-grow: 1;
+}
+
+.task-header {
+    background-color: #f0f0f0;
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+
+    &.STORY {
+        background-color: #1e8d1e;
+    }
+
+    &.BUG {
+        background-color: #ff0000;
+    }
+
+    &.RESEARCH {
+        background-color: #a83d00;
+    }
+}
+
+.task-id, .task-type {
+    font-weight: bold;
+}
+
+.task-body {
+    padding: 10px 0;
+}
+
+.task-name {
+    color: #333;
+}
+
+.task-assignee {
+    color: #555;
+    font-style: italic;
+}

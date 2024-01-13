@@ -1,0 +1,23 @@
+[
+  {
+    "model": "core.Type",
+    "pk": 1,
+    "fields": {
+      "type": "STORY"
+    }
+  },
+  {
+    "model": "core.Type",
+    "pk": 2,
+    "fields": {
+      "type": "BUG"
+    }
+  },
+  {
+    "model": "core.Type",
+    "pk": 3,
+    "fields": {
+      "type": "RESEARCH"
+    }
+  }
+]

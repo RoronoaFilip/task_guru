@@ -2,10 +2,10 @@
 {% load static %}
 {% block content %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'main/projects.css' %}">
+    <link rel="stylesheet" href="{% static 'projects/projects.css' %}">
     <div class="flex-direction-row flex-wrap flex-start">
         {% for project in projects %}
-            <div class="project-card" id="{{ project.id }}">
+            <div class="project-card" id="project-{{ project.id }}">
                 <div class="flex-direction-row">
                     <h2 class="project-name">{{ project.name }}</h2>
                     <div class="project-actions">
@@ -22,6 +22,11 @@
                     {% endfor %}
                 </ul>
             </div>
+            <script>
+                document.getElementById('project-{{ project.id }}').addEventListener('click', () => {
+                    window.location.href = '/projects/{{ project.id }}'
+                });
+            </script>
         {% endfor %}
     </div>
 {% endblock %}

@@ -1,0 +1,35 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'projects/project.css' %}">
+    <div class="container">
+        <div class="column">
+            <div class="table-header">OPEN</div>
+            <div class="sub-column" id="column-open">
+                {% for task in open_tasks %}
+                    {% include "tasks/task.html" with id=task.id title=task.title type=task.type.type status=task.status.status assignee=task.assignee %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="table-header">IN PROGRESS</div>
+            <div class="sub-column" id="column-in-progress">
+                {% for task in in_progress_tasks %}
+                    {% include "tasks/task.html" with id=task.id title=task.title type=task.type.type status=task.status.status assignee=task.assignee %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="table-header">DONE</div>
+            <div class="sub-column" id="column-done">
+                {% for task in done_tasks %}
+                    {% include "tasks/task.html" with id=task.id title=task.title type=task.type.type status=task.status.status assignee=task.assignee %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+```

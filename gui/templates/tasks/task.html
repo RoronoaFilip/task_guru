@@ -1,0 +1,91 @@
+{% load static %}
+
+{% block task %}
+    <link rel="stylesheet" href="{% static 'tasks/task.css' %}">
+    <div class="task" id="task-{{ id }}">
+        <div class="task-arrows" id="left-arrow-{{ id }}"
+                {% if status == 'OPEN' %}
+             hidden
+                {% endif %}>
+            <div class="arrow left-arrow">&larr;</div>
+        </div>
+
+        <div class="task-content">
+            <div class="task-header {{ type }}" id="task-header-{{ id }}">
+                <span class="task-id">{{ id }}</span>
+                <span class="task-type">{{ type }}</span>
+            </div>
+            <div class="task-body">
+                <h2 class="task-name">{{ title }}</h2>
+                <p class="task-assignee" id="{{ id }}-status">Status: {{ status }}</p>
+                <p class="task-assignee">Assignee: {{ assignee }}</p>
+            </div>
+        </div>
+        <div class="task-arrows" id="right-arrow-{{ id }}"
+                {% if status == 'DONE' %}
+             hidden
+                {% endif %}>
+            <div class="arrow right-arrow">&rarr;</div>
+        </div>
+        <script>
+            (function setup() {
+                let currStatus = '{{ status  }}';
+                const taskDiv = document.getElementById('task-{{ id }}');
+
+                let columnOpen = document.getElementById('column-open');
+                let columnInProgress = document.getElementById('column-in-progress');
+                let columnDone = document.getElementById('column-done');
+
+                const leftArrow = document.getElementById('left-arrow-{{ id }}');
+                const rightArrow = document.getElementById('right-arrow-{{ id }}');
+
+                leftArrow.addEventListener('click', function () {
+                    const newStatus = currStatus === 'DONE' ? 'IN PROGRESS' : 'OPEN';
+                    updateStatus(newStatus);
+                });
+                rightArrow.addEventListener('click', function () {
+                    const newStatus = currStatus === 'OPEN' ? 'IN PROGRESS' : 'DONE';
+                    updateStatus(newStatus);
+                });
+
+                function updateStatus(newStatus) {
+                    fetch('http://localhost:8000/api/tasks/{{ id }}', {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            status: newStatus
+                        })
+                    }).then(() => {
+                        console.log(`Status of task {{ id }} updated to ${newStatus}`);
+                    })
+                        .then(() => {
+                            const statusP = document.getElementById('{{ id }}-status');
+                            statusP.innerText = `Status: ${newStatus}`;
+                            moveTask(newStatus);
+                            currStatus = newStatus;
+                        })
+                        .catch(err => console.log(err));
+                }
+
+                function moveTask(newStatus) {
+                    columnOpen = columnOpen || document.getElementById('column-open');
+                    columnInProgress = columnInProgress || document.getElementById('column-in-progress');
+                    columnDone = columnDone || document.getElementById('column-done');
+                    switch (newStatus) {
+                        case 'OPEN':
+                            columnOpen.appendChild(taskDiv);
+                            break;
+                        case 'IN PROGRESS':
+                            columnInProgress.appendChild(taskDiv);
+                            break;
+                        case 'DONE':
+                            columnDone.appendChild(taskDiv);
+                            break;
+                    }
+                }
+            })()
+        </script>
+    </div>
+{% endblock %}

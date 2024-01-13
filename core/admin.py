@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
+from .models.log import Log
 from .models.project import Project
 from .models.task import Task, Type, Status
 
@@ -39,9 +40,17 @@ class ProjectAdmin(admin.ModelAdmin):
     search_fields = ('id', 'name', 'description', 'creator', 'members')
 
 
+class LogAdmin(admin.ModelAdmin):
+    model = Log
+    list_display = ('id', 'user', 'request_method', 'request_uri', 'payload', 'response_status', 'created')
+    list_filter = ('id', 'user', 'request_method', 'request_uri', 'payload', 'response_status', 'created')
+    search_fields = ('id', 'user', 'request_method', 'request_uri', 'payload', 'response_status', 'created')
+
+
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Status, StatusAdmin)
 admin.site.register(Type, TypeAdmin)
 admin.site.register(Project, ProjectAdmin)
+admin.site.register(Log, LogAdmin)

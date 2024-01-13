@@ -3,10 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, get_object_or_404
 from django.shortcuts import render
 
+from api.decorators import log
 from core.models.project import Project
+from core.models.task import Task
 from gui.forms import RegisterUserForm, ProjectUpdateForm
 
 
+@log
 def register(request):
     """Register view."""
     if request.method == "POST":
@@ -23,6 +26,7 @@ def register(request):
     return render(request, 'registration/register.html', context)
 
 
+@log
 @login_required(login_url='/login')
 def logout(request):
     """Logout view."""
@@ -30,6 +34,7 @@ def logout(request):
     return redirect('/login')
 
 
+@log
 @login_required(login_url='/login')
 def index(request):
     """Sockets page."""
@@ -38,6 +43,7 @@ def index(request):
     })
 
 
+@log
 @login_required(login_url='/login')
 def home(request):
     """Home page view render."""
@@ -46,17 +52,19 @@ def home(request):
     })
 
 
+@log
 @login_required(login_url='/login')
 def projects(request):
     """Projects page view render."""
     user = request.user
     projects = Project.objects.filter(members=user)
-    return render(request, 'main/projects.html', {
+    return render(request, 'projects/projects.html', {
         'user': request.user,
         'projects': projects,
     })
 
 
+@log
 @login_required(login_url='/login')
 def update_project(request, project_id):
     project = get_object_or_404(Project, id=project_id)
@@ -69,4 +77,37 @@ def update_project(request, project_id):
     else:
         form = ProjectUpdateForm(instance=project)
 
-    return render(request, 'project/project_update.html', {'form': form, 'project': project})
+    return render(request, 'projects/project_update.html', {'form': form, 'projects': project})
+
+
+@log
+@login_required(login_url='/login')
+def get_task(request, task_id):
+    """Task page view render."""
+    task = get_object_or_404(Task, id=task_id)
+    return render(request, 'tasks/task.html', {
+        'id': task.id,
+        'title': task.title,
+        'type': task.type.type,
+        'status': task.status.status,
+        'assignee': task.assignee,
+    })
+
+
+@log
+@login_required(login_url='/login')
+def display_project(request, project_id):
+    request.body
+    project = get_object_or_404(Project, id=project_id)
+    tasks = Task.objects.filter(project=project)
+
+    open_tasks = tasks.filter(status__status='OPEN')
+    in_progress_tasks = tasks.filter(status__status='IN PROGRESS')
+    done_tasks = tasks.filter(status__status='DONE')
+
+    return render(request, 'projects/project.html', {
+        'project': project,
+        'open_tasks': open_tasks,
+        'in_progress_tasks': in_progress_tasks,
+        'done_tasks': done_tasks,
+    })

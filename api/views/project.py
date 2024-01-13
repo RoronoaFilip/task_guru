@@ -4,12 +4,13 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.decorators import content_type_json
+from api.decorators import content_type_json, log
 from core.models.project import Project
 from core.models.task import Task
 from core.serializers import ProjectSerializer, TaskSerializer
 
 
+@log
 @content_type_json
 @api_view(['GET'])
 def get_project_members(request, project_id, *args, **kwargs):
@@ -23,6 +24,7 @@ def get_project_members(request, project_id, *args, **kwargs):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
+@log
 @content_type_json
 @api_view(['GET'])
 def get_project_tasks(request, project_id, *args, **kwargs):
@@ -37,6 +39,7 @@ def get_project_tasks(request, project_id, *args, **kwargs):
 
 
 class ProjectView(APIView):
+    @log
     def get(self, request, *args, **kwargs):
         task_id = kwargs.get('project_id')
 
@@ -52,6 +55,7 @@ class ProjectView(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @log
     def post(self, request, *args, **kwargs):
         request.data['creator'] = User.objects.get(id=request.data.get('creator_id')).id if request.data.get(
             'creator_id') else None
@@ -63,6 +67,7 @@ class ProjectView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @log
     def patch(self, request, project_id, *args, **kwargs):
         project = Project.objects.get(id=project_id)
 
@@ -77,6 +82,7 @@ class ProjectView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @log
     def delete(self, request, project_id, *args, **kwargs):
         try:
             project = Project.objects.get(id=project_id)
