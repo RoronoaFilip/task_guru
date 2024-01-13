@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_api_key.permissions import HasAPIKey
@@ -60,6 +61,9 @@ class TaskView(APIView):
         return JsonResponse(serializer.errors, status=400)
 
     def delete(self, request, task_id, *args, **kwargs):
-        task = Task.objects.get(id=task_id)
-        task.delete()
-        return Response(status=200)
+        try:
+            task = Task.objects.get(id=task_id)
+            task.delete()
+            return Response(status=200)
+        except Task.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
