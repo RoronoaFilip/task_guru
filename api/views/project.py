@@ -57,11 +57,13 @@ class ProjectView(APIView):
 
     @log
     def post(self, request, *args, **kwargs):
-        request.data['creator'] = User.objects.get(id=request.data.get('creator_id')).id if request.data.get(
+        data = {}
+        data['name'] = request.data.get('name', '')
+        data['description'] = request.data.get('description', '')
+        data['creator'] = User.objects.get(id=request.data.get('creator_id')).id if request.data.get(
             'creator_id') else None
-        # request.data['members'] = []
 
-        serializer = ProjectSerializer(data=request.data)
+        serializer = ProjectSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -71,11 +73,11 @@ class ProjectView(APIView):
     def patch(self, request, project_id, *args, **kwargs):
         project = Project.objects.get(id=project_id)
 
-        patch_data = {
-            'name': request.data.get('name', project.name),
-            'description': request.data.get('description', project.description),
-            'members': request.data.get('members', project.members),
-        }
+        patch_data = {}
+        patch_data['name'] = request.data.get('name', project.name)
+        patch_data['description'] = request.data.get('description', project.description)
+        patch_data['members'] = request.data.get('members', project.members)
+
         serializer = ProjectSerializer(project, data=patch_data, partial=True)
         if serializer.is_valid():
             serializer.save()
