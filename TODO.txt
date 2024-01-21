@@ -11,10 +11,12 @@ DONE:
     - Added Pages for listing the Projects of the current User
     - Added a Django Form for Updating a Project
     - Created Projects Listing Page
+    - Create Project Task Page.
+    - Made Auto Updates on Status Click Update
+    - Make Task Update form Use the REST API
 
 TODO:
     - Add Pages. (HTML) Gui App.
-    - Create Project Task Page.
     - Add Views (HTML) for the Models. Visualization Divs
     - Add Controllers for the Views
     - Add Live Updates through WebSockets for Updates on the Models

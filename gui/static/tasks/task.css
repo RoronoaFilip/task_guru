@@ -66,11 +66,34 @@
     padding: 10px 0;
 }
 
-.task-name {
+.task-title {
     color: #333;
+}
+
+.task-status {
+    color: #555;
+    font-style: italic;
 }
 
 .task-assignee {
     color: #555;
     font-style: italic;
+}
+
+.task-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 20%;
+}
+
+.delete-icon,
+.edit-icon {
+    font-size: 1.2em;
+    color: #ff6347;
+    cursor: pointer;
+}
+
+.edit-icon {
+    color: #007bff;
 }

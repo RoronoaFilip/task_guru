@@ -1,12 +1,10 @@
 {% load static %}
 
 {% block task %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'tasks/task.css' %}">
     <div class="task" id="task-{{ id }}">
-        <div class="task-arrows" id="left-arrow-{{ id }}"
-                {% if status == 'OPEN' %}
-             hidden
-                {% endif %}>
+        <div class="task-arrows" id="left-arrow-{{ id }}">
             <div class="arrow left-arrow">&larr;</div>
         </div>
 
@@ -14,23 +12,25 @@
             <div class="task-header {{ type }}" id="task-header-{{ id }}">
                 <span class="task-id">{{ id }}</span>
                 <span class="task-type">{{ type }}</span>
+                <div class="task-actions">
+                    <a href="/tasks/{{ id }}/update" class="fas fa-cog edit-icon"></a>
+                    <i id="delete-{{ id }}" class="fas fa-trash-alt delete-icon"></i>
+                </div>
             </div>
             <div class="task-body">
-                <h2 class="task-name">{{ title }}</h2>
-                <p class="task-assignee" id="{{ id }}-status">Status: {{ status }}</p>
+                <h2 class="task-title">{{ title }}</h2>
+                <p class="task-status" id="{{ id }}-status">Status: {{ status }}</p>
                 <p class="task-assignee">Assignee: {{ assignee }}</p>
             </div>
         </div>
-        <div class="task-arrows" id="right-arrow-{{ id }}"
-                {% if status == 'DONE' %}
-             hidden
-                {% endif %}>
+        <div class="task-arrows" id="right-arrow-{{ id }}">
             <div class="arrow right-arrow">&rarr;</div>
         </div>
         <script>
             (function setup() {
                 let currStatus = '{{ status  }}';
                 const taskDiv = document.getElementById('task-{{ id }}');
+                const statusP = document.getElementById('{{ id }}-status');
 
                 let columnOpen = document.getElementById('column-open');
                 let columnInProgress = document.getElementById('column-in-progress');
@@ -40,12 +40,27 @@
                 const rightArrow = document.getElementById('right-arrow-{{ id }}');
 
                 leftArrow.addEventListener('click', function () {
+                    const currStatus = statusP.innerText.split(' ')[1];
                     const newStatus = currStatus === 'DONE' ? 'IN PROGRESS' : 'OPEN';
                     updateStatus(newStatus);
                 });
                 rightArrow.addEventListener('click', function () {
+                    const currStatus = statusP.innerText.split(' ')[1];
                     const newStatus = currStatus === 'OPEN' ? 'IN PROGRESS' : 'DONE';
                     updateStatus(newStatus);
+                });
+
+                const deleteIcon = document.getElementById('delete-{{ id }}');
+                deleteIcon.addEventListener('click', function () {
+                    fetch('http://localhost:8000/api/tasks/{{ id }}', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(() => taskDiv.remove())
+                        .then(() => console.log(`Task {{ id }} deleted`))
+                        .catch(err => console.log(err));
                 });
 
                 function updateStatus(newStatus) {
@@ -64,7 +79,6 @@
                             const statusP = document.getElementById('{{ id }}-status');
                             statusP.innerText = `Status: ${newStatus}`;
                             moveTask(newStatus);
-                            currStatus = newStatus;
                         })
                         .catch(err => console.log(err));
                 }

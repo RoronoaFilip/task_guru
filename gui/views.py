@@ -6,7 +6,7 @@ from django.shortcuts import render
 from api.decorators import log
 from core.models.project import Project
 from core.models.task import Task
-from gui.forms import RegisterUserForm, ProjectUpdateForm
+from gui.forms import RegisterUserForm, TaskUpdateForm, ProjectUpdateForm
 
 
 @log
@@ -97,7 +97,6 @@ def get_task(request, task_id):
 @log
 @login_required(login_url='/login')
 def display_project(request, project_id):
-    request.body
     project = get_object_or_404(Project, id=project_id)
     tasks = Task.objects.filter(project=project)
 
@@ -111,3 +110,19 @@ def display_project(request, project_id):
         'in_progress_tasks': in_progress_tasks,
         'done_tasks': done_tasks,
     })
+
+
+@log
+@login_required(login_url='/login')
+def update_task(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+
+    if request.method == 'POST':
+        form = TaskUpdateForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/projects/{task.project.id}')
+    else:
+        form = TaskUpdateForm(instance=task)
+
+    return render(request, 'tasks/task_update.html', {'form': form, 'task': task})

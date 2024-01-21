@@ -1,18 +1,22 @@
+import json
+
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 
-class Consumer(AsyncWebsocketConsumer):
+class ProjectConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.group_name = None
 
     async def connect(self):
-        self.group_name = self.scope['url_route']['kwargs']['group_name']
+        project_id = self.scope['url_route']['kwargs']['project_id']
+        self.group_name = f'project_{project_id}'
         await self.channel_layer.group_add(
             self.group_name,
             self.channel_name
         )
         await self.accept()
+        await self.receive('connected')
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
@@ -21,64 +25,21 @@ class Consumer(AsyncWebsocketConsumer):
         )
 
     async def receive(self, text_data):
-        message = text_data
         await self.channel_layer.group_send(
             self.group_name,
             {
-                'type': 'chat_message',
-                'message': message
+                'type': 'message',
+                'message': text_data
             }
         )
 
-    async def chat_message(self, event):
+    async def message(self, event):
+        """Handle message type events."""
         message = event['message']
-        await self.send(text_data=json.dumps({'message': message}))
+        await self.send(text_data=message)
 
 
-import json
-
-from asgiref.sync import async_to_sync
-from channels.generic.websocket import WebsocketConsumer
-
-
-class ChatConsumer(WebsocketConsumer):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.room_group_name = None
-        self.room_name = None
-
-    def connect(self):
-        self.room_group_name = self.scope["url_route"]["kwargs"]["group_name"]
-
-        async_to_sync(self.channel_layer.group_add)(
-            self.room_group_name, self.channel_name
-        )
-
-        self.accept()
-
-    def disconnect(self, close_code):
-        # Leave room group
-        async_to_sync(self.channel_layer.group_discard)(
-            self.room_group_name, self.channel_name
-        )
-
-    # Receive message from WebSocket
-    def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        group_name = text_data_json["group_name"]
-        message = text_data_json["text_message"]
-
-        # Send message to room group
-        async_to_sync(self.channel_layer.group_send)(
-            group_name, {
-                "type": "message",
-                "message": message
-            }
-        )
-
-    # Receive message from room group
-    def message(self, event):
-        message = event["message"]
-
-        # Send message to WebSocket
-        self.send(text_data=json.dumps({"message": message}))
+    async def update_task(self, event):
+        """Handle update_task type events."""
+        message = event['task']
+        await self.send(text_data=json.dumps(message))

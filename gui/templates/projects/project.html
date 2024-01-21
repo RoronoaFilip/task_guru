@@ -3,33 +3,70 @@
 
 {% block content %}
     <link rel="stylesheet" href="{% static 'projects/project.css' %}">
-    <div class="container">
-        <div class="column">
-            <div class="table-header">OPEN</div>
-            <div class="sub-column" id="column-open">
-                {% for task in open_tasks %}
-                    {% include "tasks/task.html" with id=task.id title=task.title type=task.type.type status=task.status.status assignee=task.assignee %}
-                {% endfor %}
-            </div>
+    <div class="project-container">
+        <div class="col-12">
+            <h1 class="project-title">{{ project.name }}</h1>
         </div>
-
-        <div class="column">
-            <div class="table-header">IN PROGRESS</div>
-            <div class="sub-column" id="column-in-progress">
-                {% for task in in_progress_tasks %}
-                    {% include "tasks/task.html" with id=task.id title=task.title type=task.type.type status=task.status.status assignee=task.assignee %}
-                {% endfor %}
+        <div class="tasks-table">
+            <div class="column">
+                <div class="table-header">OPEN</div>
+                <div class="sub-column" id="column-open">
+                    {% for task in open_tasks %}
+                        {% include "tasks/task.html" with id=task.id title=task.title type=task.type.type status=task.status.status assignee=task.assignee %}
+                    {% endfor %}
+                </div>
             </div>
-        </div>
 
-        <div class="column">
-            <div class="table-header">DONE</div>
-            <div class="sub-column" id="column-done">
-                {% for task in done_tasks %}
-                    {% include "tasks/task.html" with id=task.id title=task.title type=task.type.type status=task.status.status assignee=task.assignee %}
-                {% endfor %}
+            <div class="column">
+                <div class="table-header">IN PROGRESS</div>
+                <div class="sub-column" id="column-in-progress">
+                    {% for task in in_progress_tasks %}
+                        {% include "tasks/task.html" with id=task.id title=task.title type=task.type.type status=task.status.status assignee=task.assignee %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="table-header">DONE</div>
+                <div class="sub-column" id="column-done">
+                    {% for task in done_tasks %}
+                        {% include "tasks/task.html" with id=task.id title=task.title type=task.type.type status=task.status.status assignee=task.assignee %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script>
+        var socketSingle = new WebSocket('ws://127.0.0.1:8000/ws/{{ project.id }}');
+
+        socketSingle.onmessage = function (e) {
+            console.log('Received message:', e.data);
+            if (e.data === 'connected') {
+                return;
+            }
+            const task = JSON.parse(e.data);
+            const taskDiv = document.getElementById(`task-${task.id}`);
+            if (taskDiv) {
+                handleUpdate(task, taskDiv);
+            }
+        };
+
+        function handleUpdate(task, taskDiv) {
+            const taskIdField = taskDiv.querySelector('.task-id');
+            const taskTitleField = taskDiv.querySelector('.task-title');
+            const taskTypeField = taskDiv.querySelector('.task-type');
+            const taskStatusField = taskDiv.querySelector('.task-status');
+            const taskAssigneeField = taskDiv.querySelector('.task-assignee');
+
+            taskTitleField.innerHTML = task.title;
+            taskTypeField.innerHTML = task.type;
+            taskStatusField.innerHTML = `Status: ${task.status}`;
+            taskAssigneeField.innerHTML = `Assignee: ${task.assignee}`;
+
+            const column = document.getElementById(`column-${task.status.toLowerCase().replace(' ', '-')}`);
+            column.appendChild(taskDiv);
+        }
+    </script>
 {% endblock %}
 ```

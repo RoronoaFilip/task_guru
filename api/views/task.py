@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+import core.sockets.sockets_utils as sockets_utils
 from api.decorators import log
 from core.models.project import Project
 from core.models.task import Task, Type, Status
@@ -71,6 +72,7 @@ class TaskView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            sockets_utils.send_task_update_event(task.project.id, task)
             return JsonResponse(serializer.data, status=200)
         return JsonResponse(serializer.errors, status=400)
 
