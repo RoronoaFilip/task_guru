@@ -14,13 +14,12 @@ DONE:
     - Create Project Task Page.
     - Made Auto Updates on Status Click Update
     - Make Task Update form Use the REST API
+    - Made Tasks Update by overloading the Save method in the Form to send Update Event
+    - Created a Task Create, made it update with location Reload
 
 TODO:
-    - Add Pages. (HTML) Gui App.
-    - Add Views (HTML) for the Models. Visualization Divs
-    - Add Controllers for the Views
-    - Add Live Updates through WebSockets for Updates on the Models
-    - But for now make the Gui App work, add event Listeners and stuff
-    - Add REST Endpoints only if necessary
     - Add a way to Generate API Keys or Tokens in the REST API
     - UNIT TESTS
+    - Fix Create of Tasks
+    - Add Auto Update on Delete of a Task
+    - Clean Code
