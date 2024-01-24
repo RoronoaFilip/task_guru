@@ -128,9 +128,12 @@ def get_task(request, task_id):
 
 @log
 @login_required(login_url='/login')
-def create_task(request):
+def create_task(request, project_id):
     if request.method == 'POST':
-        form = TaskUpdateForm(request.POST)
+        new_task = Task()
+        new_task.project = Project.objects.get(id=project_id)
+        new_task.creator = request.user
+        form = TaskUpdateForm(request.POST, instance=new_task)
         if form.is_valid():
             task = form.save()
             return redirect(f'/projects/{task.project.id}')

@@ -6,6 +6,7 @@
     <div class="project-container">
         <div class="col-12">
             <h1 class="project-title">{{ project.name }}</h1>
+            <a href="/projects/{{ project.id }}/task/create">CREATE</a>
         </div>
         <div class="tasks-table">
             <div class="column">
@@ -52,14 +53,15 @@
         };
 
         function handleCreate(task) {
-            fetch(`http://localhost:8000/tasks/${task.id}`)
-                .then(response => response.text())
-                .then(data => {
-                    const taskDiv = document.createElement('div');
-                    taskDiv.innerHTML = data;
-                    const column = document.getElementById(`column-${justifyStatus(task.status)}`);
-                    column.appendChild(taskDiv.querySelector('.task'));
-                });
+            location.reload();
+            {#fetch(`http://localhost:8000/tasks/${task.id}`)#}
+            {#    .then(response => response.text())#}
+            {#    .then(data => {#}
+            {#        const taskDiv = document.createElement('div');#}
+            {#        taskDiv.innerHTML = data;#}
+            {#        const column = document.getElementById(`column-${justifyStatus(task.status)}`);#}
+            {#        column.appendChild(taskDiv.querySelector('.task'));#}
+            {#    });#}
         }
 
         function handleUpdate(task, taskDiv) {
