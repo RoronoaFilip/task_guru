@@ -114,15 +114,42 @@ def display_project(request, project_id):
 
 @log
 @login_required(login_url='/login')
+def get_task(request, task_id):
+    """Task page view render."""
+    task = get_object_or_404(Task, id=task_id)
+    return render(request, 'tasks/task.html', {
+        'id': task.id,
+        'title': task.title,
+        'type': task.type.type,
+        'status': task.status.status,
+        'assignee': task.assignee,
+    })
+
+
+@log
+@login_required(login_url='/login')
+def create_task(request):
+    if request.method == 'POST':
+        form = TaskUpdateForm(request.POST)
+        if form.is_valid():
+            task = form.save()
+            return redirect(f'/projects/{task.project.id}')
+    else:
+        form = TaskUpdateForm()
+    return render(request, 'tasks/task_create.html', {'form': form})
+
+
+@log
+@login_required(login_url='/login')
 def update_task(request, task_id):
     task = get_object_or_404(Task, id=task_id)
 
     if request.method == 'POST':
-        form = TaskUpdateForm(request.POST, instance=task)
+        form = TaskUpdateForm(request.POST, instance=task) if task else TaskUpdateForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect(f'/projects/{task.project.id}')
     else:
-        form = TaskUpdateForm(instance=task)
+        form = TaskUpdateForm(instance=task) if task else TaskUpdateForm()
 
-    return render(request, 'tasks/task_update.html', {'form': form, 'task': task})
+    return render(request, 'tasks/task_update.html', {'form': form})

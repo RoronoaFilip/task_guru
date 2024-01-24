@@ -47,10 +47,20 @@
             }
             const task = JSON.parse(e.data);
             const taskDiv = document.getElementById(`task-${task.id}`);
-            if (taskDiv) {
-                handleUpdate(task, taskDiv);
-            }
+            taskDiv && handleUpdate(task, taskDiv)
+            !taskDiv && handleCreate(task);
         };
+
+        function handleCreate(task) {
+            fetch(`http://localhost:8000/tasks/${task.id}`)
+                .then(response => response.text())
+                .then(data => {
+                    const taskDiv = document.createElement('div');
+                    taskDiv.innerHTML = data;
+                    const column = document.getElementById(`column-${justifyStatus(task.status)}`);
+                    column.appendChild(taskDiv.querySelector('.task'));
+                });
+        }
 
         function handleUpdate(task, taskDiv) {
             const taskIdField = taskDiv.querySelector('.task-id');
@@ -64,8 +74,16 @@
             taskStatusField.innerHTML = `Status: ${task.status}`;
             taskAssigneeField.innerHTML = `Assignee: ${task.assignee}`;
 
-            const column = document.getElementById(`column-${task.status.toLowerCase().replace(' ', '-')}`);
+            const taskHeader = taskDiv.querySelector('.task-header');
+            taskHeader.classList.remove('STORY', 'BUG', 'RESEARCH');
+            taskHeader.classList.add(task.type);
+
+            const column = document.getElementById(`column-${justifyStatus(task.status)}`);
             column.appendChild(taskDiv);
+        }
+
+        function justifyStatus(status) {
+            return status.toLowerCase().replace(' ', '-');
         }
     </script>
 {% endblock %}
