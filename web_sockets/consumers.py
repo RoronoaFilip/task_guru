@@ -38,8 +38,17 @@ class ProjectConsumer(AsyncWebsocketConsumer):
         message = event['message']
         await self.send(text_data=message)
 
-
-    async def update_task(self, event):
+    async def task_update(self, event):
         """Handle update_task type events."""
-        message = event['task']
+        await self._dispatch_message(event)
+
+    async def task_create(self, event):
+        """Handle create_task type events."""
+        await self._dispatch_message(event)
+
+    async def task_delete(self, event):
+        """Handle delete_task type events."""
+        await self._dispatch_message(event)
+
+    async def _dispatch_message(self, message):
         await self.send(text_data=json.dumps(message))

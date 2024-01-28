@@ -61,3 +61,16 @@ def log(view_func):
         return response
 
     return wrapper
+
+
+def except_and_then(class_to_except, then):
+    """Return a decorator that catches the given exception and returns the given function."""
+    def decorator(view_func):
+        def wrapper(*args, **kwargs):
+            try:
+                return view_func(*args, **kwargs)
+            except class_to_except:
+                return then()
+        return wrapper
+    return decorator
+

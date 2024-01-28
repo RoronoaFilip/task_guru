@@ -1,61 +1,58 @@
-import json
-
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
 
-from api.decorators import content_type_json, log
+from core.decorators import content_type_json, log, except_and_then
 from core.models.project import Project
 from core.models.task import Task
 from core.serializers import ProjectSerializer, TaskSerializer
 
+EXCEPTION = Project.DoesNotExist
+
+
+def and_then_callback():
+    """Called after the exception is caught."""
+    return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 @log
+@except_and_then(EXCEPTION, and_then_callback)
 @content_type_json
 @api_view(['GET'])
 def get_project_members(request, project_id, *args, **kwargs):
     """Returns all members for a given project by project_id."""
-    try:
-        project = Project.objects.get(id=project_id)
-        members = project.members.all()
-        return Response([{'id': member.id, 'username': member.username} for member in members],
-                        status=status.HTTP_200_OK)
-    except Project.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    project = Project.objects.get(id=project_id)
+    members = project.members.all()
+    return Response([{'id': member.id, 'username': member.username} for member in members],
+                    status=status.HTTP_200_OK)
 
 
 @log
+@except_and_then(EXCEPTION, and_then_callback)
 @content_type_json
 @api_view(['GET'])
 def get_project_tasks(request, project_id, *args, **kwargs):
     """Returns all tasks for a given project by project_id"""
-    try:
-        project = Project.objects.get(id=project_id)
-        tasks = Task.objects.filter(project=project)
-        serializer = TaskSerializer(tasks, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    except Project.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    project = Project.objects.get(id=project_id)
+    tasks = Task.objects.filter(project=project)
+    serializer = TaskSerializer(tasks, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ProjectView(APIView):
     @log
+    @except_and_then(EXCEPTION, and_then_callback)
     def get(self, request, *args, **kwargs):
         task_id = kwargs.get('project_id')
 
-        try:
-            if task_id:
-                task = Project.objects.get(id=task_id)
-                serializer = ProjectSerializer(task)
-            else:
-                tasks = Project.objects.all()
-                serializer = ProjectSerializer(tasks, many=True)
-        except Project.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        if task_id:
+            task = Project.objects.get(id=task_id)
+            serializer = ProjectSerializer(task)
+        else:
+            tasks = Project.objects.all()
+            serializer = ProjectSerializer(tasks, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -74,6 +71,7 @@ class ProjectView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @log
+    @except_and_then(EXCEPTION, and_then_callback)
     def patch(self, request, project_id, *args, **kwargs):
         project = Project.objects.get(id=project_id)
 
@@ -89,10 +87,8 @@ class ProjectView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @log
+    @except_and_then(EXCEPTION, and_then_callback)
     def delete(self, request, project_id, *args, **kwargs):
-        try:
-            project = Project.objects.get(id=project_id)
-            project.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except Project.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        project = Project.objects.get(id=project_id)
+        project.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

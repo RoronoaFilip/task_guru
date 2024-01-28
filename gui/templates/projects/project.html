@@ -40,16 +40,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
     <script>
         var socketSingle = new WebSocket('ws://127.0.0.1:8000/ws/{{ project.id }}');
+        const onMessageCallbacks = {
+            'task_create': handleCreate,
+            'task_update': handleUpdate,
+            'task_delete': handleDelete,
+        };
 
         socketSingle.onmessage = function (e) {
             console.log('Received message:', e.data);
             if (e.data === 'connected') {
                 return;
             }
-            const task = JSON.parse(e.data);
-            const taskDiv = document.getElementById(`task-${task.id}`);
-            taskDiv && handleUpdate(task, taskDiv)
-            !taskDiv && handleCreate(task);
+            const event = JSON.parse(e.data);
+            const type = event.type;
+            onMessageCallbacks[type](event.task);
         };
 
         function handleCreate(task) {
@@ -64,12 +68,13 @@
             {#    });#}
         }
 
-        function handleUpdate(task, taskDiv) {
-            const taskIdField = taskDiv.querySelector('.task-id');
-            const taskTitleField = taskDiv.querySelector('.task-title');
-            const taskTypeField = taskDiv.querySelector('.task-type');
-            const taskStatusField = taskDiv.querySelector('.task-status');
-            const taskAssigneeField = taskDiv.querySelector('.task-assignee');
+        function handleUpdate(task) {
+            const taskDiv = document.getElementById(`task-${task.id}`);
+            const taskIdField = taskDiv?.querySelector('.task-id');
+            const taskTitleField = taskDiv?.querySelector('.task-title');
+            const taskTypeField = taskDiv?.querySelector('.task-type');
+            const taskStatusField = taskDiv?.querySelector('.task-status');
+            const taskAssigneeField = taskDiv?.querySelector('.task-assignee');
 
             taskTitleField.innerHTML = task.title;
             taskTypeField.innerHTML = task.type;
@@ -82,6 +87,11 @@
 
             const column = document.getElementById(`column-${justifyStatus(task.status)}`);
             column.appendChild(taskDiv);
+        }
+
+        function handleDelete(task) {
+            const taskDiv = document.getElementById(`task-${task.id}`);
+            taskDiv?.remove();
         }
 
         function justifyStatus(status) {

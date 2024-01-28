@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, get_object_or_404
 from django.shortcuts import render
 
-from api.decorators import log
+from core.decorators import log
 from core.models.project import Project
 from core.models.task import Task
 from gui.forms import RegisterUserForm, TaskUpdateForm, ProjectUpdateForm
