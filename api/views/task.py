@@ -44,8 +44,8 @@ class TaskView(APIView):
 
         serializer = TaskSerializer(data=post_data)
         if serializer.is_valid():
-            serializer.save()
-            sockets_utils.send_task_create_event(post_data['project'], serializer.instance)
+            task = serializer.save()
+            sockets_utils.send_task_create_event(post_data['project'], task)
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
 

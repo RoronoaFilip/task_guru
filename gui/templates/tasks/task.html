@@ -1,8 +1,6 @@
 {% load static %}
 
 {% block task %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'tasks/task.css' %}">
     <div class="task" id="task-{{ id }}">
         <div class="task-arrows" id="left-arrow-{{ id }}">
             <div class="arrow left-arrow">&larr;</div>
@@ -18,7 +16,7 @@
                 </div>
             </div>
             <div class="task-body">
-                <h2 class="task-title">{{ title }}</h2>
+                <h3 class="task-title">{{ title }}</h3>
                 <p class="task-status" id="{{ id }}-status">Status: {{ status }}</p>
                 <p class="task-assignee">Assignee: {{ assignee }}</p>
             </div>
@@ -26,79 +24,5 @@
         <div class="task-arrows" id="right-arrow-{{ id }}">
             <div class="arrow right-arrow">&rarr;</div>
         </div>
-        <script>
-            (function setup() {
-                const taskDiv = document.getElementById('task-{{ id }}');
-                const statusP = document.getElementById('{{ id }}-status');
-
-                let columnOpen = document.getElementById('column-open');
-                let columnInProgress = document.getElementById('column-in-progress');
-                let columnDone = document.getElementById('column-done');
-
-                const leftArrow = document.getElementById('left-arrow-{{ id }}');
-                const rightArrow = document.getElementById('right-arrow-{{ id }}');
-
-                leftArrow.addEventListener('click', function () {
-                    const currStatus = statusP.innerText.split(' ')[1];
-                    const newStatus = currStatus === 'DONE' ? 'IN PROGRESS' : 'OPEN';
-                    updateStatus(newStatus);
-                });
-                rightArrow.addEventListener('click', function () {
-                    const currStatus = statusP.innerText.split(' ')[1];
-                    const newStatus = currStatus === 'OPEN' ? 'IN PROGRESS' : 'DONE';
-                    updateStatus(newStatus);
-                });
-
-                const deleteIcon = document.getElementById('delete-{{ id }}');
-                deleteIcon.addEventListener('click', function () {
-                    fetch('http://localhost:8000/api/tasks/{{ id }}', {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                        .then(() => taskDiv.remove())
-                        .then(() => console.log(`Task {{ id }} deleted`))
-                        .catch(err => console.log(err));
-                });
-
-                function updateStatus(newStatus) {
-                    fetch('http://localhost:8000/api/tasks/{{ id }}', {
-                        method: 'PATCH',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            status: newStatus
-                        })
-                    }).then(() => {
-                        console.log(`Status of task {{ id }} updated to ${newStatus}`);
-                    })
-                        .then(() => {
-                            const statusP = document.getElementById('{{ id }}-status');
-                            statusP.innerText = `Status: ${newStatus}`;
-                            moveTask(newStatus);
-                        })
-                        .catch(err => console.log(err));
-                }
-
-                function moveTask(newStatus) {
-                    columnOpen = columnOpen || document.getElementById('column-open');
-                    columnInProgress = columnInProgress || document.getElementById('column-in-progress');
-                    columnDone = columnDone || document.getElementById('column-done');
-                    switch (newStatus) {
-                        case 'OPEN':
-                            columnOpen.appendChild(taskDiv);
-                            break;
-                        case 'IN PROGRESS':
-                            columnInProgress.appendChild(taskDiv);
-                            break;
-                        case 'DONE':
-                            columnDone.appendChild(taskDiv);
-                            break;
-                    }
-                }
-            })()
-        </script>
     </div>
 {% endblock %}

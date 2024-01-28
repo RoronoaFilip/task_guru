@@ -63,11 +63,16 @@
 }
 
 .task-body {
-    padding: 10px 0;
+    padding: 0;
 }
 
 .task-title {
     color: #333;
+    font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 295px;
 }
 
 .task-status {
@@ -96,4 +101,5 @@
 
 .edit-icon {
     color: #007bff;
+    text-decoration: none;
 }

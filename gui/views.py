@@ -6,20 +6,20 @@ from django.shortcuts import render
 from core.decorators import log
 from core.models.project import Project
 from core.models.task import Task
-from gui.forms import RegisterUserForm, TaskUpdateForm, ProjectUpdateForm
+from gui import forms
 
 
 @log
 def register(request):
     """Register view."""
     if request.method == "POST":
-        form = RegisterUserForm(request.POST)
+        form = forms.RegisterUserForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('/')
     else:
-        form = RegisterUserForm()
+        form = forms.RegisterUserForm()
     context = {
         'form': form,
     }
@@ -32,15 +32,6 @@ def logout(request):
     """Logout view."""
     django_logout(request)
     return redirect('/login')
-
-
-@log
-@login_required(login_url='/login')
-def index(request):
-    """Sockets page."""
-    return render(request, 'sockets_index.html', {
-        'group_name': 'test',
-    })
 
 
 @log
@@ -70,12 +61,12 @@ def update_project(request, project_id):
     project = get_object_or_404(Project, id=project_id)
 
     if request.method == 'POST':
-        form = ProjectUpdateForm(request.POST, instance=project)
+        form = forms.ProjectUpdateForm(request.POST, instance=project)
         if form.is_valid():
             form.save()
             return redirect('projects')
     else:
-        form = ProjectUpdateForm(instance=project)
+        form = forms.ProjectUpdateForm(instance=project)
 
     return render(request, 'projects/project_update.html', {'form': form, 'projects': project})
 
@@ -106,6 +97,7 @@ def display_project(request, project_id):
 
     return render(request, 'projects/project.html', {
         'project': project,
+        'tasks': tasks,
         'open_tasks': open_tasks,
         'in_progress_tasks': in_progress_tasks,
         'done_tasks': done_tasks,
@@ -133,12 +125,12 @@ def create_task(request, project_id):
         new_task = Task()
         new_task.project = Project.objects.get(id=project_id)
         new_task.creator = request.user
-        form = TaskUpdateForm(request.POST, instance=new_task)
+        form = forms.TaskCreateForm(request.POST, instance=new_task)
         if form.is_valid():
             task = form.save()
             return redirect(f'/projects/{task.project.id}')
     else:
-        form = TaskUpdateForm()
+        form = forms.TaskCreateForm()
     return render(request, 'tasks/task_create.html', {'form': form})
 
 
@@ -148,11 +140,11 @@ def update_task(request, task_id):
     task = get_object_or_404(Task, id=task_id)
 
     if request.method == 'POST':
-        form = TaskUpdateForm(request.POST, instance=task) if task else TaskUpdateForm(request.POST)
+        form = forms.TaskUpdateForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
             return redirect(f'/projects/{task.project.id}')
     else:
-        form = TaskUpdateForm(instance=task) if task else TaskUpdateForm()
+        form = forms.TaskUpdateForm(instance=task)
 
     return render(request, 'tasks/task_update.html', {'form': form})

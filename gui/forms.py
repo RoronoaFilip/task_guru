@@ -2,10 +2,9 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+import core.sockets.sockets_utils as sockets_utils
 from core.models.project import Project
 from core.models.task import Task
-
-import core.sockets.sockets_utils as sockets_utils
 
 
 class RegisterUserForm(UserCreationForm):
@@ -25,6 +24,19 @@ class ProjectUpdateForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = ['name', 'description', 'members']
+
+
+class TaskCreateForm(forms.ModelForm):
+    def save(self, commit=True):
+        task = super(TaskCreateForm, self).save(commit=False)
+        if commit:
+            task.save()
+            sockets_utils.send_task_create_event(task.project.id, task)
+        return task
+
+    class Meta:
+        model = Task
+        fields = ['title', 'type', 'status', 'assignee', 'description']
 
 
 class TaskUpdateForm(forms.ModelForm):

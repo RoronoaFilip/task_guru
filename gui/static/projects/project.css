@@ -11,8 +11,8 @@
     flex-direction: row;
     justify-content: flex-start;
     width: 100%;
-    margin: 20px;
-    gap: 10px;
+    margin: 20px 0 20px 0;
+    gap: 5px;
 }
 
 .column {
@@ -40,4 +40,14 @@
 
 .table-cell {
     text-align: center;
+}
+
+.add-icon {
+    font-size: 20px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.add-icon:active {
+    color: #7e57c2;
 }
