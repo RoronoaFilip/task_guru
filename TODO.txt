@@ -23,3 +23,7 @@ TODO:
     - Fix Create of Tasks
     - Add Auto Update on Delete of a Task
     - Clean Code
+	- Add Discord Message send on Updated Task
+	- Make this Message Send async
+	- Make the Publishing of Events on POST, PATCH and DELETE async
+	- Get Readme of repositories from github

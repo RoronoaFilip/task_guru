@@ -5,7 +5,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
 
-from web_sockets import routing
+from sockets import routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'task_guru.settings')
 

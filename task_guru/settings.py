@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "core.apps.CoreConfig",
     "api.apps.ApiConfig",
     "gui.apps.GuiConfig",
-    "web_sockets.apps.WebSocketsConfig"
+    "sockets.apps.WebSocketsConfig"
 ]
 
 MIDDLEWARE = [

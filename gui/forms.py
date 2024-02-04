@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-import core.sockets.sockets_utils as sockets_utils
+import sockets.utils.sockets_utils as sockets_utils
 from core.models.project import Project
 from core.models.task import Task
 
@@ -23,7 +23,7 @@ class ProjectUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ['name', 'description', 'members']
+        fields = ['name', 'description', 'members', 'github_username', 'github_name']
 
 
 class TaskCreateForm(forms.ModelForm):

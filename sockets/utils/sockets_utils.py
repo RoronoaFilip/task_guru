@@ -1,20 +1,22 @@
+from threading import Thread
+
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
 
 def send_task_create_event(project_id, task):
     """Send a task create event to the project group."""
-    _send_event(project_id, 'task_create', 'task', _to_dict(task))
+    _send_event_async(_send_event, (project_id, 'task_create', 'task', _to_dict(task)))
 
 
 def send_task_update_event(project_id, task):
     """Send a task update event to the project group."""
-    _send_event(project_id, 'task_update', 'task', _to_dict(task))
+    _send_event_async(_send_event, (project_id, 'task_update', 'task', _to_dict(task)))
 
 
 def send_task_delete_event(project_id, task_id):
     """Send a task delete event to the project group."""
-    _send_event(project_id, 'task_delete', 'task', {'id': task_id})
+    _send_event_async(_send_event, (project_id, 'task_delete', 'task', {'id': task_id}))
 
 
 def _to_dict(task):
@@ -28,6 +30,12 @@ def _to_dict(task):
         'assignee': task.assignee.username if task.assignee else None,
         'project_id': task.project.id
     }
+
+
+def _send_event_async(target, args):
+    """Send an event to the project group."""
+    thread = Thread(target=target, args=args)
+    thread.start()
 
 
 def _send_event(project_id, event_type, field, data):

@@ -7,7 +7,7 @@ from core.decorators import log, except_and_then
 from core.models.project import Project
 from core.models.task import Task, Type, Status
 from core.serializers import TaskSerializer
-from core.sockets import sockets_utils
+from sockets.utils import sockets_utils
 
 TASK_EXCEPTION = Task.DoesNotExist
 STATUS_EXCEPTION = Status.DoesNotExist

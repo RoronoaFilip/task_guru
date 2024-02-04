@@ -80,7 +80,7 @@ class TaskViewTestCase(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    @patch('core.sockets.sockets_utils.send_task_create_event')
+    @patch('utils.utils.sockets_utils.send_task_create_event')
     def test_create_task(self, mock_send_task_create_event):
         response = self.client.post('/api/tasks', data=self.new_task_data)
 
@@ -90,7 +90,7 @@ class TaskViewTestCase(TestCase):
         test_utils.compare_tasks(self, self.new_task_data, new_task)
         mock_send_task_create_event.assert_called_with(self.project.id, new_task)
 
-    @patch('core.sockets.sockets_utils.send_task_update_event')
+    @patch('utils.utils.sockets_utils.send_task_update_event')
     def test_update_task(self, mock_send_task_create_event):
         expected = {
             'id': self.task.id,
@@ -109,7 +109,7 @@ class TaskViewTestCase(TestCase):
         mock_send_task_create_event.assert_called_with(self.project.id, updated_task)
         test_utils.compare_tasks(self, expected, updated_task)
 
-    @patch('core.sockets.sockets_utils.send_task_delete_event')
+    @patch('utils.utils.sockets_utils.send_task_delete_event')
     def test_delete_task(self, mock_send_task_create_event):
         response = self.client.delete(f'/api/tasks/{self.task.id}')
 

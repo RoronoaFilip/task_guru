@@ -35,9 +35,9 @@ class TypeAdmin(admin.ModelAdmin):
 
 class ProjectAdmin(admin.ModelAdmin):
     model = Project
-    list_display = ('id', 'name', 'description', 'creator')
-    list_filter = ('id', 'name', 'description', 'creator', 'members')
-    search_fields = ('id', 'name', 'description', 'creator', 'members')
+    list_display = ('id', 'name', 'description', 'creator', 'github_username', 'github_name')
+    list_filter = ('id', 'name', 'description', 'creator', 'members', 'github_username', 'github_name')
+    search_fields = ('id', 'name', 'description', 'creator', 'members', 'github_username', 'github_name')
 
 
 class LogAdmin(admin.ModelAdmin):
