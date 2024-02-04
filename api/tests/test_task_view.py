@@ -63,30 +63,35 @@ class TaskViewTestCase(TestCase):
             'assignee_id': self.task.assignee_id,
             'project_id': self.task.project_id,
         }
+
         response = self.client.get(f'/api/tasks/{self.task.id}')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         test_utils.compare_tasks(self, expected, response.data)
 
     def test_get_all_tasks(self):
         response = self.client.get('/api/tasks')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
 
     def test_get_nonexistent_task(self):
         response = self.client.get('/api/tasks/999')
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_create_task(self):
-        with patch('core.sockets.sockets_utils.send_task_create_event') as mock_send_task_create_event:
-            response = self.client.post('/api/tasks', data=self.new_task_data)
-            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    @patch('core.sockets.sockets_utils.send_task_create_event')
+    def test_create_task(self, mock_send_task_create_event):
+        response = self.client.post('/api/tasks', data=self.new_task_data)
 
-            new_task = Task.objects.get(title='New Test Task')
-            self.assertIsNotNone(new_task)
-            test_utils.compare_tasks(self, self.new_task_data, new_task)
-            mock_send_task_create_event.assert_called_with(self.project.id, new_task)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        new_task = Task.objects.get(title='New Test Task')
+        self.assertIsNotNone(new_task)
+        test_utils.compare_tasks(self, self.new_task_data, new_task)
+        mock_send_task_create_event.assert_called_with(self.project.id, new_task)
 
-    def test_update_task(self):
+    @patch('core.sockets.sockets_utils.send_task_update_event')
+    def test_update_task(self, mock_send_task_create_event):
         expected = {
             'id': self.task.id,
             'title': 'Updated Test Task',
@@ -96,21 +101,23 @@ class TaskViewTestCase(TestCase):
             'assignee_id': self.user.id,
             'project_id': self.project.id,
         }
-        with patch('core.sockets.sockets_utils.send_task_update_event') as mock_send_task_create_event:
-            response = self.client.patch(f'/api/tasks/{self.task.id}', data=self.patch_data),
-            self.assertEqual(response[0].status_code, status.HTTP_200_OK)
 
-            updated_task = Task.objects.get(id=self.task.id)
-            mock_send_task_create_event.assert_called_with(self.project.id, updated_task)
-            test_utils.compare_tasks(self, expected, updated_task)
+        response = self.client.patch(f'/api/tasks/{self.task.id}', data=self.patch_data)
 
-    def test_delete_task(self):
-        with patch('core.sockets.sockets_utils.send_task_delete_event') as mock_send_task_create_event:
-            response = self.client.delete(f'/api/tasks/{self.task.id}')
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
-            self.assertFalse(Task.objects.filter(id=self.task.id).exists())
-            mock_send_task_create_event.assert_called_with(self.project.id, self.task.id)
+        self.assertEqual(response[0].status_code, status.HTTP_200_OK)
+        updated_task = Task.objects.get(id=self.task.id)
+        mock_send_task_create_event.assert_called_with(self.project.id, updated_task)
+        test_utils.compare_tasks(self, expected, updated_task)
+
+    @patch('core.sockets.sockets_utils.send_task_delete_event')
+    def test_delete_task(self, mock_send_task_create_event):
+        response = self.client.delete(f'/api/tasks/{self.task.id}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertFalse(Task.objects.filter(id=self.task.id).exists())
+        mock_send_task_create_event.assert_called_with(self.project.id, self.task.id)
 
     def test_delete_nonexistent_task(self):
         response = self.client.delete('/api/tasks/999')
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
