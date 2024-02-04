@@ -16,6 +16,7 @@ DONE:
     - Make Task Update form Use the REST API
     - Made Tasks Update by overloading the Save method in the Form to send Update Event
     - Created a Task Create, made it update with location Reload
+	- Make the Publishing of Events on POST, PATCH and DELETE async
 
 TODO:
     - Add a way to Generate API Keys or Tokens in the REST API
@@ -24,6 +25,5 @@ TODO:
     - Add Auto Update on Delete of a Task
     - Clean Code
 	- Add Discord Message send on Updated Task
-	- Make this Message Send async
-	- Make the Publishing of Events on POST, PATCH and DELETE async
-	- Get Readme of repositories from github
+	- Make this Discord Message Send async
+	- Get Display Files of repository from github

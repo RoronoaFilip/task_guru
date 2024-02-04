@@ -66,11 +66,9 @@
 .task-title {
     color: #333;
     font-size: 40px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     align-self: center;
     margin-bottom: 16px;
+    flex-wrap: wrap;
 }
 
 .task-status, .task-assignee {
@@ -101,11 +99,11 @@
 }
 
 .edit-icon {
-    color: #007bff;
+    color: #7e57c2;
 }
 
 .back-icon {
-    color: #007bff;
+    color: #7e57c2;
 }
 
 .task-description {

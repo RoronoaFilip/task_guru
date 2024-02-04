@@ -78,7 +78,7 @@
         });
 
         function handleCreate(task) {
-            fetch(`http://localhost:8000/tasks/${task.id}`)
+            fetch(`http://localhost:8000/tasks/${task.id}/card`)
                 .then(response => response.text())
                 .then(data => {
                     const taskDiv = document.createElement('div');
@@ -121,9 +121,9 @@
 
         function setupTask(id) {
             const taskDiv = document.getElementById(`task-${id}`);
-            const taskContent = document.getElementById(`task-content-${id}`);
+            const taskBody = document.getElementById(`task-body-${id}`);
 
-            taskContent.addEventListener('click', function () {
+            taskBody.addEventListener('click', function () {
                 window.location.href = `/tasks/${id}`;
             });
 

@@ -9,6 +9,7 @@ urlpatterns = [
     path('projects/<int:project_id>', views.display_project, name='project'),
     path('projects/<int:project_id>/update', views.update_project, name='project'),
     path('tasks/<int:task_id>', views.get_task_page, name='task'),
+    path('tasks/<int:task_id>/card', views.get_task, name='task'),
     path('tasks/<int:task_id>/update', views.update_task, name='task'),
     path('tasks/<int:project_id>/create', views.create_task, name='task'),
     path('login', auth_views.LoginView.as_view()),
