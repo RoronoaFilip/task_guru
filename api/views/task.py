@@ -1,14 +1,13 @@
 from django.contrib.auth.models import User
-from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-import core.sockets.sockets_utils as sockets_utils
 from core.decorators import log, except_and_then
 from core.models.project import Project
 from core.models.task import Task, Type, Status
 from core.serializers import TaskSerializer
+from core.sockets import sockets_utils
 
 TASK_EXCEPTION = Task.DoesNotExist
 STATUS_EXCEPTION = Status.DoesNotExist
@@ -36,18 +35,18 @@ class TaskView(APIView):
                 return Response(status=204)
             serializer = TaskSerializer(tasks, many=True)
 
-        return JsonResponse(serializer.data, status=200)
+        return Response(serializer.data, status=200)
 
     @log
     def post(self, request, *args, **kwargs):
-        post_data = extract_post_date(request.data)
+        post_data = extract_post_data(request.data)
 
         serializer = TaskSerializer(data=post_data)
         if serializer.is_valid():
             task = serializer.save()
             sockets_utils.send_task_create_event(post_data['project'], task)
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
     @log
     @except_and_then(TASK_EXCEPTION, and_then_callback)
@@ -66,8 +65,8 @@ class TaskView(APIView):
         if serializer.is_valid():
             task = serializer.save()
             sockets_utils.send_task_update_event(task.project.id, task)
-            return JsonResponse(serializer.data, status=200)
-        return JsonResponse(serializer.errors, status=400)
+            return Response(serializer.data, status=200)
+        return Response(serializer.errors, status=400)
 
     @log
     @except_and_then(TASK_EXCEPTION, and_then_callback)
@@ -78,7 +77,7 @@ class TaskView(APIView):
         return Response(status=200)
 
 
-def extract_post_date(data_dict):
+def extract_post_data(data_dict):
     """Extract the post_data from a Request data."""
     post_data = {
         'title': data_dict.get('title'), 'description': data_dict.get('description'),

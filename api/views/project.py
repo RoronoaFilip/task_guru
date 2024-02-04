@@ -45,14 +45,14 @@ class ProjectView(APIView):
     @log
     @except_and_then(EXCEPTION, and_then_callback)
     def get(self, request, *args, **kwargs):
-        task_id = kwargs.get('project_id')
+        project_id = kwargs.get('project_id')
 
-        if task_id:
-            task = Project.objects.get(id=task_id)
-            serializer = ProjectSerializer(task)
+        if project_id:
+            project = Project.objects.get(id=project_id)
+            serializer = ProjectSerializer(project)
         else:
-            tasks = Project.objects.all()
-            serializer = ProjectSerializer(tasks, many=True)
+            projects = Project.objects.all()
+            serializer = ProjectSerializer(projects, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
