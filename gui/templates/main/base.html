@@ -2,7 +2,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Sockets</title>
+    {% if project %}
+        <title>{{ project.name }}</title>
+    {% else %}
+        <title>Task Guru</title>
+    {% endif %}
     <link rel="stylesheet" href="{% static 'main/base.css' %}">
 </head>
 <body>

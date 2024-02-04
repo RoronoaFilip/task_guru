@@ -22,7 +22,8 @@
 
 .task-content {
     flex-grow: 1;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
     --ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
     scrollbar-width: none; /* Hide scrollbar for Firefox */
 }

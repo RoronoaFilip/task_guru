@@ -7,7 +7,10 @@
     <link rel="stylesheet" href="{% static 'tasks/task.css' %}">
     <div class="project-container">
         <div class="col-12">
-            <h1 class="project-title">{{ project.name }}</h1>
+            <h1 class="project-title">
+                {{ project.name }}
+                <i type="button" class="fas fa-trash-alt project-delete-icon" id="project-delete-icon"></i>
+            </h1>
             <a href="/tasks/{{ project.id }}/create" class="fas fa-plus add-icon"></a>
         </div>
         <div class="tasks-table">
@@ -61,6 +64,18 @@
             const type = event.type;
             onMessageCallbacks[type](event.task);
         };
+
+        document.getElementById('project-delete-icon')?.addEventListener('click', function () {
+            fetch('http://localhost:8000/api/projects/{{ project.id }}', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(() => window.location.href = '/projects')
+                .then(() => console.log(`Project {{ project.id }} deleted`))
+                .catch(err => alert(err));
+        });
 
         function handleCreate(task) {
             fetch(`http://localhost:8000/tasks/${task.id}`)

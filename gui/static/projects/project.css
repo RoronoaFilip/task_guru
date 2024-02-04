@@ -51,3 +51,18 @@
 .add-icon:active {
     color: #7e57c2;
 }
+
+.project-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-delete-icon {
+    font-size: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #ff6347;
+    margin-left: 10px;
+}
