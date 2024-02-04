@@ -1,0 +1,142 @@
+.task,
+.task *,
+.task-content,
+.task-content *,
+.task-header,
+.task-header * {
+    margin: 0;
+    padding: 0;
+}
+
+.task {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 10px;
+    padding: 8px;
+    width: 60%;
+    height: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.task-content {
+    flex-grow: 1;
+    overflow: scroll;
+    --ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.task-content::-webkit-scrollbar {
+    display: none;
+}
+
+.task-header {
+    background-color: #f0f0f0;
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+
+    &.STORY {
+        background-color: #1e8d1e;
+    }
+
+    &.BUG {
+        background-color: #ff0000;
+    }
+
+    &.RESEARCH {
+        background-color: #a83d00;
+    }
+}
+
+.task-id, .task-type {
+    font-weight: bold;
+}
+
+.task-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.task-title {
+    color: #333;
+    font-size: 40px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    align-self: center;
+    margin-bottom: 16px;
+}
+
+.task-status, .task-assignee {
+    color: #555;
+    font-style: italic;
+    font-size: 20px;
+    margin-left: 36px;
+}
+
+.task-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 8px;
+    width: 20%;
+}
+
+.delete-icon,
+.edit-icon,
+.back-icon,
+.plus-icon,
+.minus-icon {
+    font-size: 1.2em;
+    color: #ff6347;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.edit-icon {
+    color: #007bff;
+}
+
+.back-icon {
+    color: #007bff;
+}
+
+.task-description {
+    margin-top: 20px;
+    margin-left: 36px;
+    color: #333;
+    white-space: pre-line;
+}
+
+.back-icon-wrapper {
+    margin-top: 10px;
+}
+
+.task-page-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 90%;
+}
+
+.font-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-self: center;
+}
+
+.plus-icon,
+.minus-icon {
+    font-size: 3em;
+    color: #0500a1;
+    cursor: pointer;
+    text-decoration: none;
+}

@@ -1,3 +1,4 @@
+import markdown2 as markdown
 from django.contrib.auth import logout as django_logout, login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, get_object_or_404
@@ -107,7 +108,7 @@ def display_project(request, project_id):
 @log
 @login_required(login_url='/login')
 def get_task(request, task_id):
-    """Task page view render."""
+    """Task box view render."""
     task = get_object_or_404(Task, id=task_id)
     return render(request, 'tasks/task.html', {
         'id': task.id,
@@ -115,6 +116,22 @@ def get_task(request, task_id):
         'type': task.type.type,
         'status': task.status.status,
         'assignee': task.assignee,
+    })
+
+@log
+@login_required(login_url='/login')
+def get_task_page(request, task_id):
+    """Task page view render."""
+    task = get_object_or_404(Task, id=task_id)
+    description = markdown.markdown(task.description)
+    return render(request, 'tasks/task_page.html', {
+        'id': task.id,
+        'title': task.title,
+        'type': task.type.type,
+        'status': task.status.status,
+        'description': description,
+        'assignee': task.assignee,
+        'project_id': task.project.id,
     })
 
 

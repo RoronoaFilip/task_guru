@@ -6,7 +6,7 @@
             <div class="arrow left-arrow">&larr;</div>
         </div>
 
-        <div class="task-content">
+        <div class="task-content" id="task-content-{{ id }}">
             <div class="task-header {{ type }}" id="task-header-{{ id }}">
                 <span class="task-id">{{ id }}</span>
                 <span class="task-type">{{ type }}</span>
@@ -21,6 +21,7 @@
                 <p class="task-assignee">Assignee: {{ assignee }}</p>
             </div>
         </div>
+
         <div class="task-arrows" id="right-arrow-{{ id }}">
             <div class="arrow right-arrow">&rarr;</div>
         </div>

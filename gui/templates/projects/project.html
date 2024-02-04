@@ -8,7 +8,7 @@
     <div class="project-container">
         <div class="col-12">
             <h1 class="project-title">{{ project.name }}</h1>
-            <a href="/projects/{{ project.id }}/task/create" class="fas fa-plus add-icon"></a>
+            <a href="/tasks/{{ project.id }}/create" class="fas fa-plus add-icon"></a>
         </div>
         <div class="tasks-table">
             <div class="column">
@@ -106,6 +106,12 @@
 
         function setupTask(id) {
             const taskDiv = document.getElementById(`task-${id}`);
+            const taskContent = document.getElementById(`task-content-${id}`);
+
+            taskContent.addEventListener('click', function () {
+                window.location.href = `/tasks/${id}`;
+            });
+
             const statusP = document.getElementById(`${id}-status`);
 
             let columnOpen = document.getElementById('column-open');
