@@ -4,6 +4,9 @@
 {% block content %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'tasks/task_page.css' %}">
+    <script async defer src="{% static 'tasks/task_page.js' %}">
+        setupBackIcon({{ project_id }});
+    </script>
 
     <div class="back-icon-wrapper">
         <a id="back-icon" class="fa-solid fa-arrow-left back-icon"></a>
@@ -36,29 +39,5 @@
             <i class="fa-solid fa-arrow-down minus-icon"></i>
         </div>
     </div>
-
-    <script>
-        document.getElementById('back-icon').addEventListener('click', () => {
-            window.location.href = '/projects/{{ project_id }}';
-        });
-
-        let descriptionDiv = document.getElementById('task-description');
-        descriptionDiv.style.fontSize = '16px';
-        const plusIcon = document.querySelector('.plus-icon');
-        const minusIcon = document.querySelector('.minus-icon');
-        plusIcon.addEventListener('click', () => {
-            setFontSize('+');
-        });
-        minusIcon.addEventListener('click', () => {
-            setFontSize('-');
-        });
-
-        function setFontSize(operation) {
-            descriptionDiv = document.getElementById('task-description');
-            let currSize = +descriptionDiv.style.fontSize.match(/^[\d.]+/);
-            currSize = eval(`${currSize}${operation}2`);
-            descriptionDiv.style.fontSize = `${currSize}px`
-        }
-    </script>
 
 {% endblock %}
