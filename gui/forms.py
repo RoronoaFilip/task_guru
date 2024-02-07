@@ -14,6 +14,18 @@ class RegisterUserForm(UserCreationForm):
                   "password1", "password2")
 
 
+class ProjectCreateForm(forms.ModelForm):
+    members = forms.ModelMultipleChoiceField(
+        queryset=User.objects.all(),
+        widget=forms.SelectMultiple,
+        required=False
+    )
+
+    class Meta:
+        model = Project
+        fields = ['name', 'description', 'members', 'github_username', 'github_name']
+
+
 class ProjectUpdateForm(forms.ModelForm):
     members = forms.ModelMultipleChoiceField(
         queryset=User.objects.all(),

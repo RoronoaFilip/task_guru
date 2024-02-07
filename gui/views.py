@@ -58,6 +58,24 @@ def projects(request):
 
 @log
 @login_required(login_url='/login')
+def create_project(request):
+    """Create project view."""
+    if request.method == 'POST':
+        new_project = Project()
+        new_project.creator = request.user
+        form = forms.ProjectCreateForm(request.POST, instance=new_project)
+        if form.is_valid():
+            new_project = form.save(request.user)
+            new_project.members.add(request.user)
+            new_project.save()
+            return redirect('projects')
+    else:
+        form = forms.ProjectCreateForm()
+    return render(request, 'form.html', {'form': form, 'action': 'Create', 'item': 'Project'})
+
+
+@log
+@login_required(login_url='/login')
 def update_project(request, project_id):
     project = get_object_or_404(Project, id=project_id)
 
@@ -69,21 +87,7 @@ def update_project(request, project_id):
     else:
         form = forms.ProjectUpdateForm(instance=project)
 
-    return render(request, 'projects/project_update.html', {'form': form, 'projects': project})
-
-
-@log
-@login_required(login_url='/login')
-def get_task(request, task_id):
-    """Task page view render."""
-    task = get_object_or_404(Task, id=task_id)
-    return render(request, 'tasks/task.html', {
-        'id': task.id,
-        'title': task.title,
-        'type': task.type.type,
-        'status': task.status.status,
-        'assignee': task.assignee,
-    })
+    return render(request, 'form.html', {'form': form, 'action': 'Update', 'item': 'Project'})
 
 
 @log
@@ -148,7 +152,7 @@ def create_task(request, project_id):
             return redirect(f'/projects/{task.project.id}')
     else:
         form = forms.TaskCreateForm()
-    return render(request, 'tasks/task_create.html', {'form': form})
+    return render(request, 'form.html', {'form': form, 'action': 'Create', 'item': 'Task'})
 
 
 @log
@@ -164,4 +168,4 @@ def update_task(request, task_id):
     else:
         form = forms.TaskUpdateForm(instance=task)
 
-    return render(request, 'tasks/task_update.html', {'form': form})
+    return render(request, 'form.html', {'form': form, 'action': 'Update', 'item': 'Task'})

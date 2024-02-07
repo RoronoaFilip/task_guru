@@ -5,25 +5,30 @@
     <link rel="stylesheet" href="{% static 'projects/projects.css' %}">
     <script src="{% static 'projects/projects.js' %}"></script>
 
-    <div class="flex-direction-row flex-wrap flex-start">
-        {% for project in projects %}
-            <div class="project-card" id="project-{{ project.id }}">
-                <div class="flex-direction-row">
-                    <h2 class="project-name">{{ project.name }}</h2>
-                    <div class="project-actions">
-                        <a href="/projects/{{ project.id }}/update" class="fas fa-cog edit-icon"></a>
+    <div class="flex-direction-column flex-start">
+        <div class="col-12">
+            <a href="/projects/create" class="fas fa-plus add-icon"></a>
+        </div>
+        <div class="flex-direction-row flex-wrap flex-start">
+            {% for project in projects %}
+                <div class="project-card" id="project-{{ project.id }}">
+                    <div class="flex-direction-row">
+                        <h2 class="project-name">{{ project.name }}</h2>
+                        <div class="project-actions">
+                            <a href="/projects/{{ project.id }}/update" class="fas fa-cog edit-icon"></a>
+                        </div>
                     </div>
+                    <p class="project-description">{{ project.description }}</p>
+                    <p class="project-creator">Created
+                        by: {{ project.creator.first_name }} {{ project.creator.last_name }}</p>
+                    <ul class="project-members">
+                        {% for member in project.members.all %}
+                            <li class="project-member">{{ member.first_name }} {{ member.last_name }}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
-                <p class="project-description">{{ project.description }}</p>
-                <p class="project-creator">Created
-                    by: {{ project.creator.first_name }} {{ project.creator.last_name }}</p>
-                <ul class="project-members">
-                    {% for member in project.members.all %}
-                        <li class="project-member">{{ member.first_name }} {{ member.last_name }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
     <script>
         {% for project in projects %}
