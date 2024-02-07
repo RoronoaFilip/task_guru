@@ -4,12 +4,10 @@
 {% block content %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'tasks/task_page.css' %}">
-    <script async defer src="{% static 'tasks/task_page.js' %}">
-        setupBackIcon({{ project_id }});
-    </script>
+    <script async defer src="{% static 'tasks/task_page.js' %}"></script>
 
     <div class="back-icon-wrapper">
-        <a id="back-icon" class="fa-solid fa-arrow-left back-icon"></a>
+        <a id="back-icon" href="/projects/{{ project_id }}" class="fa-solid fa-arrow-left back-icon"></a>
     </div>
     <div class="task-page-container">
         <div class="task" id="task-{{ id }}">

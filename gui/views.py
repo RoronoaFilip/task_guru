@@ -21,10 +21,7 @@ def register(request):
             return redirect('/')
     else:
         form = forms.RegisterUserForm()
-    context = {
-        'form': form,
-    }
-    return render(request, 'registration/register.html', context)
+    return render(request, 'form.html', {'form': form, 'action': 'Register'})
 
 
 @log

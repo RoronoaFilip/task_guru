@@ -16,9 +16,3 @@ function setFontSize(operation) {
     currSize = eval(`${currSize}${operation}2`);
     descriptionDiv.style.fontSize = `${currSize}px`
 }
-
-function setupBackIcon(projectId) {
-    document.getElementById('back-icon').addEventListener('click', () => {
-        window.location.href = `/projects/${projectId}`;
-    });
-}

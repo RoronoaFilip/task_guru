@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block content %}
-    <link rel="stylesheet" href="{% static 'auth_forms.css' %}">
-    <div class="forms-container">
+    <link rel="stylesheet" href="{% static 'forms.css' %}">
+    <div class="forms-container login">
         <h2 class="forms-header">Login</h2>
         <form class="forms-form" method="post">
             {% csrf_token %}
