@@ -1,0 +1,44 @@
+#github-structure {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    margin: 0.5em;
+    position: relative;
+    overflow-y: scroll;
+    width: 90vw;
+    height: 40vh;
+    background-color: rgba(204, 204, 204, 0.09);
+    border: 1px solid #f0f0f0;
+}
+
+.github-dir,
+.github-file {
+    width: fit-content;
+    padding: 0.5em 0.5em 0.5em 0;
+    margin: 0.5em 0.5em 0.5em 0;
+    left: -30px;
+    background: #f0f0f0;
+    border: none;
+    color: #000;
+    position: relative;
+    font-size: 18px;
+    text-align: left;
+    transition: background 0.3s;
+}
+
+.github-dir {
+    display: flex;
+    flex-direction: column;
+    background: none;
+    cursor: pointer;
+}
+
+.github-file {
+    background: none;
+    color: #c25757;
+}
+
+.icon-text {
+    display: flex;
+    gap: 8px;
+}

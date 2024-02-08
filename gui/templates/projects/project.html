@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{% static 'tasks/task.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
     <script src="{% static 'projects/project.js' %}"></script>
+
     <div class="project-container">
         <div class="col-12">
             <h1 class="project-title">
@@ -15,8 +16,10 @@
             </h1>
             <a href="/tasks/{{ project.id }}/create" class="fas fa-plus add-icon"></a>
         </div>
+
         <div class="tasks-table">
-            <div class="column">
+
+        <div class="column">
                 <div class="table-header">OPEN</div>
                 <div class="sub-column" id="column-open">
                     {% for task in open_tasks %}
@@ -43,6 +46,9 @@
                 </div>
             </div>
         </div>
+        {% if project.github_name and project.github_username %}
+            {% include 'projects/github.html' with github_name=project.github_name github_username=project.github_username %}
+        {% endif %}
     </div>
     <script>
         setupSocket({{ project.id }});
