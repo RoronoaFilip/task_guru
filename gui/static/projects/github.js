@@ -1,3 +1,5 @@
+const githubProxyUrl = 'http://localhost:8000/api/github/proxy';
+
 const folderIcon = (githubFile) =>
     `<a class="fa-regular fa-folder github-element-wrapper icon-text" href="${githubFile.html_url}" target="_blank">
         <p class="icon-text name">${githubFile.name}</p>
@@ -62,17 +64,12 @@ function createFile(parent, file) {
 
 function addSpaceLeft(parent, element) {
     const currentLeft = +parent.style.left.match(/[\d.]+/);
-    const newLeft = currentLeft + 30;
+    const newLeft = currentLeft + 20;
     element.style.left = `${newLeft}px`;
 }
 
 function fetchUrl(url) {
-    return fetch(url, {
-        method: 'GET',
-        headers: {
-            'Authorization': 'Bearer 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'
-        }
-    })
+    return fetch(`${githubProxyUrl}?url=${url}`)
         .then(response => {
             if (response.ok) {
                 return response.json();
