@@ -1,5 +1,13 @@
-const folderIcon = (name) => `<i class="fa-regular fa-folder icon-text">${name}</i>`;
-const fileIcon = (name) => `<i class="fa-regular fa-file icon-text">${name}</i>`;
+const folderIcon = (githubFile) =>
+    `<a class="fa-regular fa-folder github-element-wrapper icon-text" href="${githubFile.html_url}" target="_blank">
+        <p class="icon-text name">${githubFile.name}</p>
+    </a>`;
+
+const fileIcon = (githubFile) =>
+    `<a class="fa-regular fa-file github-element-wrapper icon-text file" href="${githubFile.html_url}" target="_blank">
+        <p class="icon-text name file">${githubFile.name}</p>
+    </a>`;
+
 const githubDiv = document.getElementById('github-structure');
 
 setUpGithubDiv(url, githubDiv);
@@ -8,7 +16,7 @@ function setUpGithubDiv(url, div) {
     fetchUrl(url)
         .then(data => {
             data.filter(item => item.type === 'dir').forEach(dir => {
-                createDir(div, dir, url);
+                createDir(div, dir);
             });
             data.filter(item => item.type === 'file').forEach(file => {
                 createFile(div, file);
@@ -16,27 +24,28 @@ function setUpGithubDiv(url, div) {
         });
 }
 
-function createDir(parent, dir, url) {
+function createDir(parent, dir) {
     const button = document.createElement('button');
 
-    button.clickedFlag = false;
-    button.innerHTML = folderIcon(dir.name);
+    button.innerHTML = folderIcon(dir);
     button.classList.add('github-dir');
     addSpaceLeft(parent, button);
     parent.appendChild(button);
 
-    const currUrl = url + '/' + dir.name;
-    button.addEventListener('click', (event) => {
+    const folder = button.firstChild;
+    folder.clickedFlag = false;
+
+    folder.addEventListener('click', (event) => {
         event.preventDefault();
         event.stopPropagation();
-        if (button.clickedFlag) {
+        if (folder.clickedFlag) {
             Array.from(button.children).slice(1).forEach(child => {
                 button.removeChild(child);
             });
-            button.clickedFlag = false;
+            folder.clickedFlag = false;
         } else {
-            setUpGithubDiv(currUrl, button);
-            button.clickedFlag = true;
+            setUpGithubDiv(dir.url, button);
+            folder.clickedFlag = true;
         }
     });
 }
@@ -44,7 +53,7 @@ function createDir(parent, dir, url) {
 function createFile(parent, file) {
     const button = document.createElement('button');
 
-    button.innerHTML = fileIcon(file.name);
+    button.innerHTML = fileIcon(file);
     button.classList.add('github-file');
     button.disabled = true;
     addSpaceLeft(parent, button);
@@ -61,7 +70,7 @@ function fetchUrl(url) {
     return fetch(url, {
         method: 'GET',
         headers: {
-            'Authorization': 'Bearer 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'
+            'Authorization': 'Bearer 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'
         }
     })
         .then(response => {

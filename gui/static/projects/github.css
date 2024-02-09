@@ -14,10 +14,6 @@
 .github-dir,
 .github-file {
     width: fit-content;
-    padding: 0.5em 0.5em 0.5em 0;
-    margin: 0.5em 0.5em 0.5em 0;
-    left: -30px;
-    background: #f0f0f0;
     border: none;
     color: #000;
     position: relative;
@@ -35,10 +31,25 @@
 
 .github-file {
     background: none;
-    color: #c25757;
 }
 
 .icon-text {
+    text-decoration: none;
+    font-size: 22px;
+    color: #0500a1;
+
+    &.name {
+        font-size: 16px;
+    }
+
+    &.file {
+        color: #c70808;
+    }
+}
+
+.github-element-wrapper {
     display: flex;
-    gap: 8px;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
 }
