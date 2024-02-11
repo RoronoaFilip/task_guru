@@ -1,19 +1,19 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
-from gui import views
+from gui.views import project, task, auth
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('projects', views.projects, name='projects'),
-    path('projects/<int:project_id>', views.display_project, name='project'),
-    path('projects/<int:project_id>/update', views.update_project, name='project'),
-    path('projects/create', views.create_project, name='project'),
-    path('tasks/<int:task_id>', views.get_task_page, name='task'),
-    path('tasks/<int:task_id>/card', views.get_task, name='task'),
-    path('tasks/<int:task_id>/update', views.update_task, name='task'),
-    path('tasks/<int:project_id>/create', views.create_task, name='task'),
+    path('', auth.home, name='home'),
+    path('projects', project.get_projects, name='projects'),
+    path('projects/<int:project_id>', project.get_project, name='project'),
+    path('projects/<int:project_id>/update', project.update_project, name='project'),
+    path('projects/create', project.create_project, name='project'),
+    path('tasks/<int:task_id>', task.get_task_page, name='task'),
+    path('tasks/<int:task_id>/card', task.get_task, name='task'),
+    path('tasks/<int:task_id>/update', task.update_task, name='task'),
+    path('tasks/<int:project_id>/create', task.create_task, name='task'),
     path('login', auth_views.LoginView.as_view(), name='login'),
-    path('register', views.register, name='register'),
-    path('logout', views.logout, name='logout'),
+    path('register', auth.register, name='register'),
+    path('logout', auth.logout, name='logout'),
 ]
