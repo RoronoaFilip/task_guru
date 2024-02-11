@@ -10,7 +10,7 @@ from core.models.project import Project
 from core.models.task import Task, Type, Status
 
 
-class TaskViewTestCase(TestCase):
+class TaskApiTest(TestCase):
     def setUp(self):
         # Create a test user
         self.user = User.objects.create_user(username='testuser', password='testpass')

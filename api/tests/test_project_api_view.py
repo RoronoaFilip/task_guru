@@ -7,7 +7,7 @@ import api.tests.utils as test_utils
 from core.models.project import Project
 
 
-class ProjectViewComponentTests(TestCase):
+class ProjectApiViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(username='testuser', password='testpassword')
