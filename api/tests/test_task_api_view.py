@@ -80,7 +80,7 @@ class TaskApiTest(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    @patch('utils.utils.sockets_utils.send_task_create_event')
+    @patch('sockets.utils.sockets_utils.send_task_create_event')
     def test_create_task(self, mock_send_task_create_event):
         response = self.client.post('/api/tasks', data=self.new_task_data)
 
@@ -90,7 +90,7 @@ class TaskApiTest(TestCase):
         test_utils.compare_tasks(self, self.new_task_data, new_task)
         mock_send_task_create_event.assert_called_with(self.project.id, new_task)
 
-    @patch('utils.utils.sockets_utils.send_task_update_event')
+    @patch('sockets.utils.sockets_utils.send_task_update_event')
     def test_update_task(self, mock_send_task_create_event):
         expected = {
             'id': self.task.id,
@@ -104,12 +104,12 @@ class TaskApiTest(TestCase):
 
         response = self.client.patch(f'/api/tasks/{self.task.id}', data=self.patch_data)
 
-        self.assertEqual(response[0].status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         updated_task = Task.objects.get(id=self.task.id)
         mock_send_task_create_event.assert_called_with(self.project.id, updated_task)
         test_utils.compare_tasks(self, expected, updated_task)
 
-    @patch('utils.utils.sockets_utils.send_task_delete_event')
+    @patch('sockets.utils.sockets_utils.send_task_delete_event')
     def test_delete_task(self, mock_send_task_create_event):
         response = self.client.delete(f'/api/tasks/{self.task.id}')
 
