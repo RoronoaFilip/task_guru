@@ -51,8 +51,8 @@ def _compare_tasks_first_dict(self, dict_task, task):
     self.assertEqual(dict_task['description'], task.description)
     self.assertEqual(dict_task['type'], task.type.type)
     self.assertEqual(dict_task['status'], task.status.status)
-    self.assertEqual(dict_task['assignee_id'], task.assignee_id)
-    self.assertEqual(dict_task['project_id'], task.project.id)
+    self.assertEqual(dict_task.get('assignee_id', dict_task.get('assigneeId', '')), task.assignee_id)
+    self.assertEqual(dict_task.get('project_id', dict_task.get('projectId', '')), task.project.id)
 
 
 def _compare_tasks_both_dict(self, dict_task_1, dict_task_2):
@@ -61,8 +61,10 @@ def _compare_tasks_both_dict(self, dict_task_1, dict_task_2):
     self.assertEqual(dict_task_1['description'], dict_task_2['description'])
     self.assertEqual(dict_task_1['type'], dict_task_2['type'])
     self.assertEqual(dict_task_1['status'], dict_task_2['status'])
-    self.assertEqual(dict_task_1['assignee_id'], dict_task_2['assignee'])
-    self.assertEqual(dict_task_1['project_id'], dict_task_2['project'])
+    self.assertEqual(dict_task_1.get('assigneeId', dict_task_1.get('assignee', '')),
+                     dict_task_2.get('assigneeId', dict_task_2.get('assignee', '')))
+    self.assertEqual(dict_task_1.get('projectId', dict_task_1.get('project', '')),
+                     dict_task_2.get('projectId', dict_task_2.get('project', '')))
 
 
 

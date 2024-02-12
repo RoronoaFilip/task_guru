@@ -61,8 +61,10 @@ class ProjectView(APIView):
         data = {}
         data['name'] = request.data.get('name', '')
         data['description'] = request.data.get('description', '')
-        data['creator'] = User.objects.get(id=request.data.get('creator_id')).id if request.data.get(
-            'creator_id') else None
+        data['creator'] = User.objects.get(id=request.data.get('creatorId')).id if request.data.get(
+            'creatorId') else None
+        data['github_username'] = request.data.get('githubUsername', '')
+        data['github_name'] = request.data.get('githubName', '')
 
         serializer = ProjectSerializer(data=data)
         if serializer.is_valid():
@@ -72,13 +74,14 @@ class ProjectView(APIView):
 
     @log
     @except_and_then(EXCEPTION, and_then_callback)
-    def patch(self, request, project_id, *args, **kwargs):
+    def patch(self, request, project_id):
         project = Project.objects.get(id=project_id)
 
         patch_data = {}
         patch_data['name'] = request.data.get('name', project.name)
         patch_data['description'] = request.data.get('description', project.description)
-        patch_data['members'] = request.data.get('members', project.members)
+        patch_data['github_username'] = request.data.get('githubUsername', project.github_username)
+        patch_data['github_name'] = request.data.get('githubName', project.github_name)
 
         serializer = ProjectSerializer(project, data=patch_data, partial=True)
         if serializer.is_valid():

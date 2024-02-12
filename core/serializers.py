@@ -13,7 +13,7 @@ class TaskSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ('id', 'name', 'description', 'creator')
+        fields = ('id', 'name', 'description', 'creator', 'github_username', 'github_name')
 
     def create(self, validated_data):
         project = Project.objects.create(**validated_data)

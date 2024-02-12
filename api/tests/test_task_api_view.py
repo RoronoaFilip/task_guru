@@ -37,9 +37,9 @@ class TaskApiTest(TestCase):
             'description': 'New Test Description',
             'type': self.type.type,
             'status': self.status.status,
-            'assignee_id': self.user.id,
-            'creator_id': self.user.id,
-            'project_id': self.project.id,
+            'assigneeId': self.user.id,
+            'creatorId': self.user.id,
+            'projectId': self.project.id,
         }
 
         self.patch_data = {
@@ -47,7 +47,7 @@ class TaskApiTest(TestCase):
             'description': 'Updated Test Description',
             'type': self.type.type,
             'status': self.status.status,
-            'assignee_id': self.user.id,
+            'assigneeId': self.user.id,
         }
 
         # Set up the test client
@@ -60,8 +60,8 @@ class TaskApiTest(TestCase):
             'description': self.task.description,
             'type': self.task.type_id,
             'status': self.task.status_id,
-            'assignee_id': self.task.assignee_id,
-            'project_id': self.task.project_id,
+            'assigneeId': self.task.assignee_id,
+            'projectId': self.task.project_id,
         }
 
         response = self.client.get(f'/api/tasks/{self.task.id}')

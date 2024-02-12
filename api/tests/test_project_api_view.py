@@ -26,12 +26,12 @@ class ProjectApiViewTest(TestCase):
         self.assertEqual(len(response.data), 1)
 
     def test_post_project(self):
-        data = {'name': 'New Project', 'description': 'New Description', 'creator_id': self.user.id}
+        data = {'name': 'New Project', 'description': 'New Description', 'creatorId': self.user.id}
 
         response = self.client.post('/api/projects', data)
 
         data['id'] = 2
-        data['creator'] = data['creator_id']
+        data['creator'] = data['creatorId']
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         test_utils.compare_projects(self, response.data, data)
 

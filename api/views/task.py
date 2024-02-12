@@ -83,9 +83,9 @@ def extract_post_data(data_dict):
         'title': data_dict.get('title'), 'description': data_dict.get('description'),
         'type': Type.objects.get(type=data_dict.get('type')).id,
         'status': Status.objects.get(status='OPEN').id,
-        'assignee': User.objects.get(id=data_dict.get('assignee_id')).id if data_dict.get('assignee_id') else None,
-        'creator': User.objects.get(id=data_dict.get('creator_id')).id,
-        'project': Project.objects.get(id=data_dict.get('project_id')).id
+        'assignee': User.objects.get(id=data_dict.get('assigneeId')).id if data_dict.get('assigneeId') else None,
+        'creator': User.objects.get(id=data_dict.get('creatorId')).id,
+        'project': Project.objects.get(id=data_dict.get('projectId')).id
     }
 
     return post_data
