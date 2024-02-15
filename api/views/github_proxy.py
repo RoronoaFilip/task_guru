@@ -1,10 +1,10 @@
 import requests
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.csrf import csrf_protect
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from core.decorators import content_type_json, log
+from core.decorators import content_type_json, log, except_and_then
 from task_guru.settings import GITHUB_TOKEN
 
 
@@ -18,13 +18,14 @@ EXCEPTION = GithubRequestException
 
 def and_then_callback():
     """Called after the exception is caught."""
-    return Response(status=status.HTTP_404_NOT_FOUND)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @log
 @content_type_json
 @api_view(['GET'])
 @csrf_protect
+@except_and_then(EXCEPTION, and_then_callback)
 def github_proxy(request):
     """Proxy for github requests."""
     url = request.GET.get('url')
