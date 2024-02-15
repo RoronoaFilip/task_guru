@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 
 from core.models.project import Project
-from core.test import utils as test_utils
+from core.tests import utils as test_utils
 
 
 class ProjectGuiTest(TestCase):

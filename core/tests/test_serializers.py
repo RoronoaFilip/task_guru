@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from core.serializers import ProjectSerializer, TaskSerializer
-from core.test import utils
+from core.tests import utils
 
 
 class SerializersTest(TestCase):

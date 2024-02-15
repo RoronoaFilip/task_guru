@@ -12,7 +12,7 @@ from core.models.task import Task, Type, Status
 
 class TaskApiTest(TestCase):
     def setUp(self):
-        # Create a test user
+        # Create a tests user
         self.user = User.objects.create_user(username='testuser', password='testpass')
 
         self.type = Type.objects.create(type='Test Type')
@@ -20,7 +20,7 @@ class TaskApiTest(TestCase):
         self.project = Project.objects.create(name='Test Project', description='Test Description', creator=self.user)
 
         self.task_data = {
-            'id': 1,  # This is not used, but it's here to make the test data complete
+            'id': 1,  # This is not used, but it's here to make the tests data complete
             'title': 'Test Task',
             'description': 'Test Description',
             'type': self.type,
@@ -32,7 +32,7 @@ class TaskApiTest(TestCase):
         self.task = Task.objects.create(**self.task_data)
 
         self.new_task_data = {
-            'id': 2,  # This is not used, but it's here to make the test data complete
+            'id': 2,  # This is not used, but it's here to make the tests data complete
             'title': 'New Test Task',
             'description': 'New Test Description',
             'type': self.type.type,
@@ -50,7 +50,7 @@ class TaskApiTest(TestCase):
             'assigneeId': self.user.id,
         }
 
-        # Set up the test client
+        # Set up the tests client
         self.client = APIClient()
 
     def test_get_task(self):

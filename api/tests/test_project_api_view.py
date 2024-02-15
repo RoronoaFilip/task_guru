@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 import api.tests.utils as test_utils
+import core.tests.utils as core_utils
 from core.models.project import Project
 
 
@@ -11,7 +12,12 @@ class ProjectApiViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.project = Project.objects.create(name='Test Project', description='Test Description', creator=self.user)
+        self.project = core_utils.create_project('Test Project', 'Test Description', self.user,
+                                                 'github_username', 'github_name')
+        self.type = core_utils.create_type('BUG')
+        self.status = core_utils.create_status('OPEN')
+        self.task_1 = core_utils.create_task('Test Task 1', 'Test Task Description 1', self.project, self.user,
+                                             self.status, self.type)
 
     def test_get_single_project(self):
         response = self.client.get(f'/api/projects/{self.project.id}')
@@ -55,3 +61,19 @@ class ProjectApiViewTest(TestCase):
         response = self.client.get('/api/projects/999')
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_project_members(self):
+        response = self.client.get(f'/api/projects/{self.project.id}/members')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['id'], self.user.id)
+        self.assertEqual(response.data[0]['username'], self.user.username)
+
+    def test_add_project_tasks(self):
+        response = self.client.get(f'/api/projects/{self.project.id}/tasks')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        test_utils.compare_tasks(self, response.data[0]['title'], self.task_1.title)
+        test_utils.compare_tasks(self, response.data[0]['description'], self.task_1.description)
