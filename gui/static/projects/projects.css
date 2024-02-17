@@ -29,6 +29,10 @@
 
 .project-card:hover {
     cursor: pointer;
+    background-color: rgba(193, 193, 193, 0.46);
+}
+
+.project-card:active {
     background-color: rgba(193, 193, 193, 0.76);
 }
 
@@ -83,12 +87,22 @@
     cursor: pointer;
     text-decoration: none;
     padding: 16px;
+    color: #7e57c2;
 }
 
 .add-icon:active {
-    color: #7e57c2;
+    color: #541eb9;
 }
 
 .edit-icon {
     color: #7e57c2;
+    font-size: 25px;
+}
+
+.edit-icon:active {
+    color: #541eb9;
+}
+
+.delete-icon:active {
+    color: #ff0000;
 }

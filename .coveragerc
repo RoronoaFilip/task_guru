@@ -1,0 +1,10 @@
+[run]
+branch = True
+source = .
+omit =
+    .coveragerc
+    .git/*
+    **/migrations/*
+    **/__init__.py
+    manage.py
+    .venv/*

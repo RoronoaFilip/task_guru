@@ -41,6 +41,13 @@ class ProjectApiViewTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         test_utils.compare_projects(self, response.data, data)
 
+    def test_post_project_bad_request(self):
+        data = {'name': 'New Project', 'description': 'New Description'}
+
+        response = self.client.post('/api/projects', data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_patch_project(self):
         data = {'description': 'Updated Description'}
 
@@ -50,6 +57,13 @@ class ProjectApiViewTest(TestCase):
                     'creator': self.project.creator.id}
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         test_utils.compare_projects(self, response.data, expected)
+
+    def test_patch_project_bad_request(self):
+        data = {'name': '', 'description': 'New Description'}
+
+        response = self.client.patch(f'/api/projects/{self.project.id}', data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_delete_project(self):
         response = self.client.delete(f'/api/projects/{self.project.id}')

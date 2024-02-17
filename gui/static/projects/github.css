@@ -1,12 +1,13 @@
 #github-structure {
     display: flex;
     flex-direction: column;
-    align-self: flex-start;
+    align-self: center;
     margin: 0.5em;
     position: relative;
     overflow-y: scroll;
-    width: 90vw;
-    height: 40vh;
+    width: 69vw;
+    height: fit-content;
+    max-height: 60vh;
     background-color: rgba(204, 204, 204, 0.09);
     border: 1px solid #f0f0f0;
 }
