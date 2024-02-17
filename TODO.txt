@@ -27,3 +27,8 @@ TODO:
 	- Add Discord Message send on Updated Task
 	- Make this Discord Message Send async
 	- Get Display Files of repository from github
+
+ASK:
+    - Ask about correct way to authorize REST Calls from FrontEnd (I whitelisted 'localhost')
+    - Ask about Project File(Django App) Structure
+    - Ask about `github proxy` github API Key solution (saving key in .env file)
