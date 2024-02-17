@@ -36,7 +36,7 @@ def log(view_func):
     """Decorator to log requests and responses."""
 
     def wrapper(*args, **kwargs):
-        request = args[0]  # request is always the first argument
+        request = args[0]
         if not isinstance(request, HttpRequest):
             request = args[1]
 
@@ -57,6 +57,8 @@ def log(view_func):
         )
         response = view_func(*args, **kwargs)
         request_log.response_status = response.status_code or None
+        if hasattr(response, 'data'):
+            request_log.response_payload = response.data
         request_log.save()
         return response
 

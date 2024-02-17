@@ -7,4 +7,5 @@ class Log(models.Model):
     request_uri = models.CharField(max_length=100, null=True)
     payload = models.TextField(null=True)
     response_status = models.IntegerField(null=True)
+    response_payload = models.TextField(null=True)
     created = models.DateTimeField(auto_now_add=True, null=True)

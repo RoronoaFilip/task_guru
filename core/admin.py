@@ -42,9 +42,12 @@ class ProjectAdmin(admin.ModelAdmin):
 
 class LogAdmin(admin.ModelAdmin):
     model = Log
-    list_display = ('id', 'user', 'request_method', 'request_uri', 'payload', 'response_status', 'created')
-    list_filter = ('id', 'user', 'request_method', 'request_uri', 'payload', 'response_status', 'created')
-    search_fields = ('id', 'user', 'request_method', 'request_uri', 'payload', 'response_status', 'created')
+    list_display = ('id', 'user', 'request_method', 'request_uri',
+                    'payload', 'response_status', 'response_payload', 'created')
+    list_filter = ('id', 'user', 'request_method', 'request_uri',
+                   'payload', 'response_status', 'response_payload', 'created')
+    search_fields = ('id', 'user', 'request_method', 'request_uri',
+                     'payload', 'response_status', 'response_payload', 'created')
 
 
 admin.site.unregister(User)
