@@ -13,6 +13,6 @@ minusIcon.addEventListener('click', () => {
 function setFontSize(operation) {
     descriptionDiv = document.getElementById('task-description');
     let currSize = +descriptionDiv.style.fontSize.match(/^[\d.]+/);
-    currSize = eval(`${currSize}${operation}2`);
+    currSize = eval(`${currSize}${operation}7`);
     descriptionDiv.style.fontSize = `${currSize}px`
 }

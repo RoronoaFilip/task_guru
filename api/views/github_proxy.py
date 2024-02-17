@@ -23,9 +23,8 @@ def and_then_callback():
 
 @log
 @content_type_json
-@api_view(['GET'])
-@csrf_protect
 @except_and_then(EXCEPTION, and_then_callback)
+@api_view(['GET'])
 def github_proxy(request):
     """Proxy for github requests."""
     url = request.GET.get('url')

@@ -111,9 +111,18 @@ function setupTask(id) {
                 'Content-Type': 'application/json'
             }
         })
+            .then((response) => {
+                if (response.status === 403) {
+                    return Promise.reject('403 Forbidden: You are not allowed to Delete this task.');
+                }
+                if (response.status !== 200) {
+                    return Promise.reject('An unknown Error occurred');
+                }
+                return Promise.resolve();
+            })
             .then(() => taskDiv.remove())
             .then(() => console.log(`Task ${id} deleted`))
-            .catch(err => console.log(err));
+            .catch(err => alert(err));
     });
 
     function updateStatus(newStatus) {
@@ -125,15 +134,23 @@ function setupTask(id) {
             body: JSON.stringify({
                 status: newStatus
             })
-        }).then(() => {
-            console.log(`Status of task ${id} updated to ${newStatus}`);
         })
+            .then((response) => {
+                if (response.status === 403) {
+                    return Promise.reject('403 Forbidden: You are not allowed to Update this task.');
+                }
+                if (response.status !== 200) {
+                    return Promise.reject('An unknown Error occurred');
+                }
+                return Promise.resolve();
+            })
             .then(() => {
+            console.log(`Status of task ${id} updated to ${newStatus}`);
                 const statusP = document.getElementById(`${id}-status`);
                 statusP.innerText = `Status: ${newStatus}`;
                 moveTask(newStatus);
             })
-            .catch(err => console.log(err));
+            .catch(err => alert(err));
     }
 
     function moveTask(newStatus) {

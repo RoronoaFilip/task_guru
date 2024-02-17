@@ -12,8 +12,6 @@ SECRET_KEY = 'django-insecure-7f4+j_=)!ik#!*743l$z%jnarmtlgy4!*h55f%gyn_ni*j7nbk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
 INSTALLED_APPS = [
     "daphne",
     'django.contrib.admin',
@@ -114,10 +112,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [],
     'DEFAULT_PERMISSION_CLASSES': [
-        # 'rest_framework.permissions.AllowAny', # No Authorization Header needed
-        # 'rest_framework_api_key.permissions.HasAPIKey',  # Authorization: Api-Key <key>
+        'task_guru.permissions.auth_middlewares.TaskGuruHasAPIKey',  # Authorization: Api-Key <key>
     ],
 }
+
+ALLOWED_HOSTS = ['localhost']
 
 APPEND_SLASH = False
 
