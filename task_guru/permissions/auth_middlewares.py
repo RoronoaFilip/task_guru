@@ -7,5 +7,7 @@ class TaskGuruHasAPIKey(HasAPIKey):
             return True
         elif request.META.get('PATH_INFO', '') == '/api/github/proxy':
             return True
+        elif request.META.get('PATH_INFO', '') == '/api/api-key':
+            return True
         else:
             return super().has_permission(request, view)
