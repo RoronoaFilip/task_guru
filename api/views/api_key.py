@@ -32,7 +32,7 @@ def _invalidate_user_api_key(user):
     try:
         api_key = APIKey.objects.get(name=user.username, revoked=False)
         api_key.revoked = True
-        api_key.expires = timezone.now()
+        api_key.expiry_date = timezone.now()
         api_key.save()
     except APIKey.DoesNotExist:
         pass
